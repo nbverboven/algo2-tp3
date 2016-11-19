@@ -1,11 +1,12 @@
 #ifndef TIPOSJUEGO_H_
 #define TIPOSJUEGO_H_
 
-#include "aed2/TiposBasicos.h"
+#include "TiposBasicos.h"
 
 typedef unsigned int Jugador;
 typedef std::string Pokemon;
  
+/* se encuentra en el modulo de coordenada
 struct Coordenada
 {
 	Nat latitud;
@@ -21,6 +22,6 @@ bool operator == (const Coordenada& c1, const Coordenada& c2){
 
 bool operator != (const Coordenada& c1, const Coordenada& c2){
  return not (c1 == c2);
-}
+}*/
 
 #endif
