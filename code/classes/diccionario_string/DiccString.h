@@ -2,6 +2,7 @@
 #define DICC_STRING_H_
 
 #include "../conjunto_lineal/Conj.h"
+#include "../conjunto_lineal/Conj.cpp"
 #include <string>
 #include <iostream>
 #include <cassert>
