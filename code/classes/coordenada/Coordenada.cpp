@@ -10,12 +10,12 @@ Coordenada::~Coordenada()
 
 }
 
-const Nat Coordenada::latitud() const
+const Nat Coordenada::Latitud() const
 {
     return this->latitud;
 }
 
-const Nat Coordenada::longitud() const
+const Nat Coordenada::Longitud() const
 {
     return this->longitud;
 }
