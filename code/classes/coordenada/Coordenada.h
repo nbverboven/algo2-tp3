@@ -11,8 +11,8 @@ class Coordenada
     // Generadores
 
     // Observadores básicos
-    const Nat latitud() const;
-    const Nat longitud() const;
+    const Nat Latitud() const;
+    const Nat Longitud() const;
 
     // Otras operaciones
     static Nat distEuclidea(const Coordenada coord1, const Coordenada coord2) const; 
