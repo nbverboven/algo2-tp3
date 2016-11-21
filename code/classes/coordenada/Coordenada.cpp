@@ -87,7 +87,7 @@ bool Coordenada::operator==(const Coordenada &otra) const
     return this->latitud==Latitud(otra) && this->longitud==Longitud(otra);
 }
 
-bool Coordenada::operator!=(const Coordenada &c1, const Coordenada &c2) const
+bool Coordenada::operator!=(const Coordenada &otra) const
 {
-    return !(c1 == c2);
+    return !(this == otra);
 }
