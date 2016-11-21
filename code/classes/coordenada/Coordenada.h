@@ -1,4 +1,5 @@
 #include "classes/aed2/aed2.h"
+#include <cmath>
 using namespace aed2;
 using namespace std;
 
