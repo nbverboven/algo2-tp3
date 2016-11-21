@@ -1,3 +1,5 @@
+#include "classes/aed2/aed2.h"
+using namespace aed2;
 using namespace std;
 
 class Juego
@@ -51,6 +53,7 @@ class Juego
         Nat sanciones;
         Coordenada pos;
         Dicc<Pokemon,Nat> pokemones;
+        DiccString< Pokemon, itLista< tuple<Pokemon, Nat> > > itPokemones;
         Nat pokemonesTotales;
         itConj<jugador> itJugNoExpulsados;
         itColaPrior< tuple<Nat, Jugador> > itPosJug;
@@ -58,12 +61,13 @@ class Juego
     };
 
     Mapa mapa;
-    Conk<Jugador> jgNoExpulsados;
-    vector<jugadorStruct> jugadores;
+    Conj<Jugador> jgNoExpulsados;
+    Vector<jugadorStruct> jugadores;
     Conj<Coordenada> posConPokemones;
     DiccString<Pokemon, Nat> pokemonesSalvajes;
     DiccString<Pokemon, Nat> pokemonesCapturados;
-    vector< vector<posStruct> > posiciones;
+    Arreglo< Arreglo<posStruct> > posiciones;
+    Nat cantPokemonsTotales;
 
     // Funciones auxiliares
     

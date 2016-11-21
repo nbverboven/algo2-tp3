@@ -1,3 +1,5 @@
+#include "classes/aed2/aed2.h"
+using namespace aed2;
 using namespace std;
 
 class Mapa
