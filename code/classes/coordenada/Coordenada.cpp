@@ -1,6 +1,6 @@
 #include "Coordenada.h"
 
-Coordenada::Coordenada()
+Coordenada::Coordenada(const Nat x, const Nat y) : latitud(x), longitud(y)
 {
 
 }
@@ -10,12 +10,12 @@ Coordenada::~Coordenada()
 
 }
 
-const Nat Coordenada::latitud() const
+const Nat Coordenada::Latitud() const
 {
     return this->latitud;
 }
 
-const Nat Coordenada::longitud() const
+const Nat Coordenada::Longitud() const
 {
     return this->longitud;
 }
@@ -26,32 +26,48 @@ const Nat Coordenada::longitud() const
 */
 static Nat Coordenada::distEuclidea(const Coordenada coord1, const Coordenada coord2) const
 {
+{
+    int aux = 0;
+    if (coord1.latitud >= coord2.latitud) {
+        aux = (coord1.latitud-coord2.latitud)*(coord1.latitud-coord2.latitud);
+    }
+    else    {
+        aux = (coord2.latitud-coord1.latitud)*(coord2.latitud-coord1.latitud);
+    }
+    if (coord1.longitud>=coord2.longitud) {
+         aux = aux +(coord1.longitud-coord2.longitud)*(coord1.longitud-coord2.longitud);
+    }
+    else {
+        aux = aux +(coord2.longitud-coord1.longitud)*(coord2.longitud-coord1.longitud);
+    }
+    return aux;
+}
 
 }
 
 Coordenada Coordenada::CoordenadaArriba() const
 {
-
+return Coordenada (this->latitud+1,this->longitud);
 }
 
 Coordenada Coordenada::CoordenadaAbajo() const
 {
-
+return Coordenada (this->latitud-1,this->longitud);
 }
 
 Coordenada Coordenada::CoordenadaALaDerecha() const
 {
-
+return Coordenada (this->latitud,this->longitud+1);
 }
 
 Coordenada Coordenada::CoordenadaALaIzquierda() const
 {
-    
+return Coordenada (this->latitud,this->longitud-1);
 }
 
-bool Coordenada::operator==(const Coordenada &c1, const Coordenada &c2) const
+bool Coordenada::operator==(const Coordenada &otra) const
 {
-    return c1.latitud == c2.latitud and c1.longitud == c2.longitud;
+    return this->latitud==latitud(otra) && this->longitud==longitud(otra);
 }
 
 bool Coordenada::operator!=(const Coordenada &c1, const Coordenada &c2) const
