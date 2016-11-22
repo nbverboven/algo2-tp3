@@ -206,6 +206,61 @@ void test_borrar_elem_intermedio()
 }
 
 
+void test_borrar_elem_intermedio_2()
+{
+    ColaPrior<int> c1;
+
+    ColaPrior<int>::const_ItColaPrior it1 = c1.encolar(9);
+    ColaPrior<int>::const_ItColaPrior it2 = c1.encolar(4);
+    ColaPrior<int>::const_ItColaPrior it3 = c1.encolar(1);
+    ColaPrior<int>::ItColaPrior it4 = c1.encolar(6);
+    ColaPrior<int>::const_ItColaPrior it5 = c1.encolar(7);
+    ColaPrior<int>::const_ItColaPrior it6 = c1.encolar(3);
+    ColaPrior<int>::const_ItColaPrior it7 = c1.encolar(5);
+    ColaPrior<int>::const_ItColaPrior it8 = c1.encolar(8);
+
+    cout << '\n' << "Estado inicial: " << c1 << '\n';
+
+    ASSERT_EQ(it1.siguiente(), 9);
+    ASSERT_EQ(it2.siguiente(), 4);
+    ASSERT_EQ(it3.siguiente(), 1);
+    ASSERT_EQ(it4.siguiente(), 6);
+    ASSERT_EQ(it5.siguiente(), 7);
+    ASSERT_EQ(it6.siguiente(), 3);
+    ASSERT_EQ(it7.siguiente(), 5);
+    ASSERT_EQ(it8.siguiente(), 8);
+
+    cout << "El siguiente de it1 es: " << it1.siguiente() << '\n';
+    cout << "El siguiente de it2 es: " << it1.siguiente() << '\n';
+    cout << "El siguiente de it3 es: " << it1.siguiente() << '\n';
+    cout << "El siguiente de it4 es: " << it1.siguiente() << '\n';
+    cout << "El siguiente de it5 es: " << it1.siguiente() << '\n';
+    cout << "El siguiente de it6 es: " << it1.siguiente() << '\n';
+    cout << "El siguiente de it7 es: " << it1.siguiente() << '\n';
+    cout << "El siguiente de it8 es: " << it1.siguiente() << '\n';
+
+    cout << "Borro el 6: " << c1 << '\n';
+
+    // Chequeo que no se modifiquen los valores a los que apuntan los iteradores
+
+    ASSERT_EQ(it1.siguiente(), 9);
+    ASSERT_EQ(it2.siguiente(), 4);
+    ASSERT_EQ(it3.siguiente(), 1);
+    ASSERT_EQ(it5.siguiente(), 7);
+    ASSERT_EQ(it6.siguiente(), 3);
+    ASSERT_EQ(it7.siguiente(), 5);
+    ASSERT_EQ(it8.siguiente(), 8);
+
+    cout << "El siguiente de it1 es: " << it1.siguiente() << '\n';
+    cout << "El siguiente de it2 es: " << it1.siguiente() << '\n';
+    cout << "El siguiente de it3 es: " << it1.siguiente() << '\n';
+    cout << "El siguiente de it5 es: " << it1.siguiente() << '\n';
+    cout << "El siguiente de it6 es: " << it1.siguiente() << '\n';
+    cout << "El siguiente de it7 es: " << it1.siguiente() << '\n';
+    cout << "El siguiente de it8 es: " << it1.siguiente() << '\n';
+}
+
+
 int main()
 {
     RUN_TEST(test_constructor);
