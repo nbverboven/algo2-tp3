@@ -210,14 +210,14 @@ void test_borrar_elem_intermedio_2()
 {
     ColaPrior<int> c1;
 
-    ColaPrior<int>::const_ItColaPrior it1 = c1.encolar(9);
-    ColaPrior<int>::const_ItColaPrior it2 = c1.encolar(4);
-    ColaPrior<int>::const_ItColaPrior it3 = c1.encolar(1);
+    ColaPrior<int>::ItColaPrior it1 = c1.encolar(9);
+    ColaPrior<int>::ItColaPrior it2 = c1.encolar(4);
+    ColaPrior<int>::ItColaPrior it3 = c1.encolar(1);
     ColaPrior<int>::ItColaPrior it4 = c1.encolar(6);
-    ColaPrior<int>::const_ItColaPrior it5 = c1.encolar(7);
-    ColaPrior<int>::const_ItColaPrior it6 = c1.encolar(3);
-    ColaPrior<int>::const_ItColaPrior it7 = c1.encolar(5);
-    ColaPrior<int>::const_ItColaPrior it8 = c1.encolar(8);
+    ColaPrior<int>::ItColaPrior it5 = c1.encolar(7);
+    ColaPrior<int>::ItColaPrior it6 = c1.encolar(3);
+    ColaPrior<int>::ItColaPrior it7 = c1.encolar(5);
+    ColaPrior<int>::ItColaPrior it8 = c1.encolar(8);
 
     cout << '\n' << "Estado inicial: " << c1 << '\n';
 
@@ -270,6 +270,7 @@ int main()
     RUN_TEST(test_tamanio);
     RUN_TEST(test_proximo);
     RUN_TEST(test_borrar_elem_intermedio);
+    RUN_TEST(test_borrar_elem_intermedio_2);
 
     return 0;
 }
