@@ -54,7 +54,7 @@ void ColaPrior<T>::desencolar()
 
 
 template <class T>
-const T& ColaPrior<T>::proximo() const
+const T& ColaPrior<T>::proximo()
 {
     return crearIt().siguiente();
 }
@@ -67,35 +67,15 @@ typename ColaPrior<T>::ItColaPrior ColaPrior<T>::crearIt()
 }
 
 
-template <class T>
-typename ColaPrior<T>::const_ItColaPrior ColaPrior<T>::crearIt() const
-{
-    return const_ItColaPrior(CP_raiz_, this);
-}
-
-
 
 /***************************
  * Implementación iterador *
  ***************************/
 
 template <class T>
-ColaPrior<T>::const_ItColaPrior::const_ItColaPrior(const typename ColaPrior<T>::Nodo* primero, const ColaPrior<T>* cola)
-    : const_itCP_siguiente_(primero), const_itCP_colaP_(cola)
-{}
-
-
-template <class T>
-bool ColaPrior<T>::const_ItColaPrior::haySiguiente() const
+const T& ColaPrior<T>::ItColaPrior::siguiente() const
 {
-    return const_itCP_siguiente_ != NULL;
-}
-
-
-template <class T>
-const T& ColaPrior<T>::const_ItColaPrior::siguiente() const
-{
-    return *(const_itCP_siguiente_->nodoCP_dato_);
+    return *(itCP_siguiente_->nodoCP_dato_);
 }
 
 
@@ -343,24 +323,24 @@ void ColaPrior<T>::ItColaPrior::agregarAlFinal(const T& elem)
  ***************************************/
 
 template <class T>
-void ColaPrior<T>::const_ItColaPrior::avanzar()
+void ColaPrior<T>::ItColaPrior::avanzar()
 {
     assert(haySiguiente());
 
-    const_itCP_siguiente_ = const_itCP_siguiente_->nodoCP_siguiente_;
+    itCP_siguiente_ = itCP_siguiente_->nodoCP_siguiente_;
 
-    if ( const_itCP_siguiente_ == const_itCP_colaP_->CP_raiz_ )
+    if ( itCP_siguiente_ == itCP_colaP_->CP_raiz_ )
     {
-        const_itCP_siguiente_ = NULL;
+        itCP_siguiente_ = NULL;
     }
 }
 
 
 template <class T>
-std::ostream& operator<<(std::ostream& os, const ColaPrior<T>& cola) 
+std::ostream& operator<<(std::ostream& os, ColaPrior<T>& cola) 
 {
     os << '[';
-    typename ColaPrior<T>::const_ItColaPrior it = cola.crearIt();
+    typename ColaPrior<T>::ItColaPrior it = cola.crearIt();
 
     while ( it.haySiguiente() )
     {
