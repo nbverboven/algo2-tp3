@@ -1,8 +1,7 @@
-#ifndef DICC_STRING_H_
-#define DICC_STRING_H_
+#ifndef DICC_STRING_H_INCLUDED
+#define DICC_STRING_H_INCLUDED
 
-#include "../conjunto_lineal/Conj.h"
-#include "../conjunto_lineal/Conj.cpp"
+#include "../aed2/aed2.h"
 #include <string>
 #include <iostream>
 #include <cassert>
@@ -66,4 +65,4 @@ namespace aed2
 
 } /* namespace aed2 */
     
-#endif /* DICC_STRING_H_ */
+#endif /* DICC_STRING_H_INCLUDED */

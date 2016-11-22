@@ -1,7 +1,7 @@
 #ifndef COLA_PRIOR_H_INCLUDED
 #define COLA_PRIOR_H_INCLUDED
 
-#include "../../TiposBasicos.h"
+#include "../aed2/aed2/TiposBasicos.h"
 #include <iostream>
 #include <cassert>
 
