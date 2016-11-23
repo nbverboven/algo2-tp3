@@ -19,8 +19,8 @@ namespace aed2
   {
   public:
 
+    // Forward declaration
     class ItColaPrior;
-    class const_ItColaPrior;
 
     // Destructor
     ~ColaPrior();
@@ -32,14 +32,13 @@ namespace aed2
     // Observadores básicos
     bool esVacia() const;
     void desencolar();
-    const T& proximo() const;
+    const T& proximo();
     
     // Otras operaciones
     Nat tamanio() const;
 
     // Iterador (versión modificable y no modificable)
     ItColaPrior crearIt();
-    const_ItColaPrior crearIt() const;
 
 
     /**********************************************
@@ -50,7 +49,10 @@ namespace aed2
     public:
 
       bool haySiguiente() const;
+      const T& siguiente() const;
       void eliminarSiguiente();
+
+      void avanzar();
 
     private:
 
@@ -71,30 +73,6 @@ namespace aed2
       ColaPrior<T>* itCP_colaP_;
     };
 
-
-    /*******************************************************
-     * const_Iterador de Cola de Prioridad, no modificable *
-     *******************************************************/
-    class const_ItColaPrior
-    {
-    public:
-
-      bool haySiguiente() const;
-      const T& siguiente() const;
-
-      void avanzar();
-
-    private:
-
-      // Constructor que toma una cola de prioridad como parámetro
-      const_ItColaPrior(const typename ColaPrior<T>::Nodo* primero, const ColaPrior<T>* cola);
-
-      friend typename ColaPrior<T>::const_ItColaPrior ColaPrior<T>::crearIt() const;
-
-      // Atributos de la clase
-      const typename ColaPrior<T>::Nodo* const_itCP_siguiente_;
-      const ColaPrior<T>* const_itCP_colaP_;
-    };
 
   private:
 
@@ -124,7 +102,6 @@ namespace aed2
     // Atributos de la clase
     Nodo* CP_raiz_;
     Nat CP_tamanio_;
-
 
   };
 

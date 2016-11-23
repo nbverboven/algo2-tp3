@@ -127,6 +127,8 @@ void test_proximo()
     c1.encolar(5);
     c1.encolar(8);
 
+    cout << '\n' << '\n' << "======================== TEST PROXIMO =======================" << '\n';
+
     cout << '\n' << "Estado inicial: " << c1 << '\n';
 
     ASSERT_EQ(c1.proximo(), 1);
@@ -178,6 +180,8 @@ void test_proximo()
     cout << "Desencolo por 8va vez: " << c1 << '\n';
 
     ASSERT(c1.esVacia());
+
+    cout << '\n' << "====================== fin TEST PROXIMO =====================" << '\n';
 }
 
 
@@ -190,7 +194,7 @@ void test_borrar_elem_intermedio()
     c1.encolar(1);
     ColaPrior<int>::ItColaPrior it = c1.encolar(6);
     c1.encolar(7);
-    c1.encolar(3);
+    ColaPrior<int>::ItColaPrior it2 = c1.encolar(3);
     c1.encolar(5);
     c1.encolar(8);
 
@@ -198,66 +202,94 @@ void test_borrar_elem_intermedio()
     
     ASSERT_EQ(c1.tamanio(), 8);
 
-    it.eliminarSiguiente();
+    // it.eliminarSiguiente();
+    // cout << "Borro el 6: " << c1 << '\n';
 
-    cout << "Borro el 6: " << c1 << '\n';
+    // ASSERT_EQ(c1.tamanio(), 7);
 
-    ASSERT_EQ(c1.tamanio(), 7);
+    it2.eliminarSiguiente();
+    cout << "Borro el 3: " << c1 << '\n';
 }
 
 
 void test_borrar_elem_intermedio_2()
 {
+    cout << '\n' << '\n' << "=============== TEST BORRAR_ELEM_INTERMEDIO_2 ===============" << '\n';
+
     ColaPrior<int> c1;
 
     ColaPrior<int>::ItColaPrior it1 = c1.encolar(9);
+    cout << '\n' << "Encolo el 9 y lo apunto con it1" << '\n';
+
     ColaPrior<int>::ItColaPrior it2 = c1.encolar(4);
+    cout << "Encolo el 4 y lo apunto con it2" << '\n';
+
     ColaPrior<int>::ItColaPrior it3 = c1.encolar(1);
+    cout << "Encolo el 1 y lo apunto con it3" << '\n';
+
     ColaPrior<int>::ItColaPrior it4 = c1.encolar(6);
+    cout << "Encolo el 6 y lo apunto con it4" << '\n';
+
     ColaPrior<int>::ItColaPrior it5 = c1.encolar(7);
+    cout << "Encolo el 7 y lo apunto con it5" << '\n';
+
     ColaPrior<int>::ItColaPrior it6 = c1.encolar(3);
+    cout << "Encolo el 3 y lo apunto con it6" << '\n';
+
     ColaPrior<int>::ItColaPrior it7 = c1.encolar(5);
+    cout << "Encolo el 5 y lo apunto con it7" << '\n';
+
     ColaPrior<int>::ItColaPrior it8 = c1.encolar(8);
+    cout << "Encolo el 8 y lo apunto con it8" << '\n';
+
 
     cout << '\n' << "Estado inicial: " << c1 << '\n';
 
-    ASSERT_EQ(it1.siguiente(), 9);
-    ASSERT_EQ(it2.siguiente(), 4);
-    ASSERT_EQ(it3.siguiente(), 1);
-    ASSERT_EQ(it4.siguiente(), 6);
-    ASSERT_EQ(it5.siguiente(), 7);
-    ASSERT_EQ(it6.siguiente(), 3);
-    ASSERT_EQ(it7.siguiente(), 5);
-    ASSERT_EQ(it8.siguiente(), 8);
+    // ASSERT_EQ(it1.siguiente(), 9);
+    // ASSERT_EQ(it2.siguiente(), 4);
+    // ASSERT_EQ(it3.siguiente(), 1);
+    // ASSERT_EQ(it4.siguiente(), 6);
+    // ASSERT_EQ(it5.siguiente(), 7);
+    // ASSERT_EQ(it6.siguiente(), 3);
+    // ASSERT_EQ(it7.siguiente(), 5);
+    // ASSERT_EQ(it8.siguiente(), 8);
 
-    cout << "El siguiente de it1 es: " << it1.siguiente() << '\n';
-    cout << "El siguiente de it2 es: " << it1.siguiente() << '\n';
-    cout << "El siguiente de it3 es: " << it1.siguiente() << '\n';
-    cout << "El siguiente de it4 es: " << it1.siguiente() << '\n';
-    cout << "El siguiente de it5 es: " << it1.siguiente() << '\n';
-    cout << "El siguiente de it6 es: " << it1.siguiente() << '\n';
-    cout << "El siguiente de it7 es: " << it1.siguiente() << '\n';
-    cout << "El siguiente de it8 es: " << it1.siguiente() << '\n';
+    // cout << "El siguiente de it1 es: " << it1.siguiente() << '\n';
+    // cout << "El siguiente de it2 es: " << it2.siguiente() << '\n';
+    // cout << "El siguiente de it3 es: " << it3.siguiente() << '\n';
+    // cout << "El siguiente de it4 es: " << it4.siguiente() << '\n';
+    // cout << "El siguiente de it5 es: " << it5.siguiente() << '\n';
+    // cout << "El siguiente de it6 es: " << it6.siguiente() << '\n';
+    // cout << "El siguiente de it7 es: " << it7.siguiente() << '\n';
+    // cout << "El siguiente de it8 es: " << it8.siguiente() << '\n';
 
-    cout << "Borro el 6: " << c1 << '\n';
+    it4.eliminarSiguiente();
+
+    cout << '\n' << "Borro el 6: " << c1 << '\n';
 
     // Chequeo que no se modifiquen los valores a los que apuntan los iteradores
 
-    ASSERT_EQ(it1.siguiente(), 9);
-    ASSERT_EQ(it2.siguiente(), 4);
-    ASSERT_EQ(it3.siguiente(), 1);
-    ASSERT_EQ(it5.siguiente(), 7);
-    ASSERT_EQ(it6.siguiente(), 3);
-    ASSERT_EQ(it7.siguiente(), 5);
-    ASSERT_EQ(it8.siguiente(), 8);
+    // ASSERT_EQ(it1.siguiente(), 9);
+    // ASSERT_EQ(it2.siguiente(), 4);
+    // ASSERT_EQ(it3.siguiente(), 1);
+    // ASSERT_EQ(it5.siguiente(), 7);
+    // ASSERT_EQ(it6.siguiente(), 3);
+    // ASSERT_EQ(it7.siguiente(), 5);
+    // ASSERT_EQ(it8.siguiente(), 8);
 
-    cout << "El siguiente de it1 es: " << it1.siguiente() << '\n';
-    cout << "El siguiente de it2 es: " << it1.siguiente() << '\n';
-    cout << "El siguiente de it3 es: " << it1.siguiente() << '\n';
-    cout << "El siguiente de it5 es: " << it1.siguiente() << '\n';
-    cout << "El siguiente de it6 es: " << it1.siguiente() << '\n';
-    cout << "El siguiente de it7 es: " << it1.siguiente() << '\n';
-    cout << "El siguiente de it8 es: " << it1.siguiente() << '\n';
+    // cout << "El siguiente de it1 es: " << it1.siguiente() << '\n';
+    // cout << "El siguiente de it2 es: " << it2.siguiente() << '\n';
+    // cout << "El siguiente de it3 es: " << it3.siguiente() << '\n';
+    // cout << "El siguiente de it5 es: " << it5.siguiente() << '\n';
+    // cout << "El siguiente de it6 es: " << it6.siguiente() << '\n';
+    // cout << "El siguiente de it7 es: " << it7.siguiente() << '\n';
+    // cout << "El siguiente de it8 es: " << it8.siguiente() << '\n';
+
+    it6.eliminarSiguiente();
+
+    cout << '\n' << "Borro el 3: " << c1 << '\n';
+
+    cout << '\n' << "============= fin TEST BORRAR_ELEM_INTERMEDIO_2 =============" << '\n';
 }
 
 

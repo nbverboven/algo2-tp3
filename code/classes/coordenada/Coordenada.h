@@ -7,15 +7,14 @@ class Coordenada
 {
 
   public:
+    
     // Constructor y destructor
     Coordenada(const Nat x, const Nat y); //CrearCoordenda
     ~Coordenada();
 
-    // Generadores
-
     // Observadores básicos
-    const Nat Latitud() const;
-    const Nat Longitud() const;
+    const Nat& Latitud() const;
+    const Nat& Longitud() const;
 
     // Otras operaciones
     static Nat distEuclidea(const Coordenada coord1, const Coordenada coord2) const; 
