@@ -6,8 +6,11 @@
 using namespace aed2;
 using namespace std;
 
+
 template<class T>
     class Grilla {
+        private:
+            Vector< Vector<T> > vector_;
         public:
             Grilla();
             Grilla(const Grilla<T>& otro);
@@ -16,11 +19,9 @@ template<class T>
             Nat CantFilas() const;
             Nat CantColumnas() const;
 	    const T& operator() (Nat i, Nat j) const;
-
-        private:
-            Vector< Vector<T> > vector_;
+        template <class S>
+            friend std::ostream& operator << (std::ostream& os, const Grilla<S> & g);
             };
-
 
 template<class T>
 Grilla<T>::Grilla() {}
@@ -71,3 +72,11 @@ const T& Grilla<T> :: operator() (Nat i, Nat j) const {
 	assert (j < CantColumnas());
     return vector_[i][j];
 }
+
+
+template <class T>
+std::ostream& operator << (std::ostream& os, const Grilla<T>& g)
+{
+  return Mostrar(os, g.vector_, '<', '>');
+}
+
