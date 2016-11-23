@@ -7,6 +7,7 @@ using namespace aed2;
 using namespace std;
 
 
+
 template<class T>
     class Grilla {
         private:
@@ -14,20 +15,31 @@ template<class T>
         public:
             Grilla();
             Grilla(const Grilla<T>& otro);
+            Grilla<T>& operator=(const Grilla<T>& otro);
             void AgregarColumnas(const Nat n,const T& elem);
-	    void AgregarFilas(const Nat n,const T& elem);
+            void AgregarFilas(const Nat n,const T& elem);
             Nat CantFilas() const;
             Nat CantColumnas() const;
-	    const T& operator() (Nat i, Nat j) const;
-        template <class S>
+            const T& operator() (Nat i, Nat j) const;
+            T& operator() (Nat i, Nat j) ;
+            template <class S>
             friend std::ostream& operator << (std::ostream& os, const Grilla<S> & g);
             };
+    template<class T>
+    bool operator==(const Grilla<T>&, const Grilla<T>&);
+
 
 template<class T>
 Grilla<T>::Grilla() {}
 
 template<class T>
 Grilla<T>::Grilla(const Grilla<T>& otro) : vector_(otro.vector_){}
+
+template<class T>
+Grilla<T>& Grilla<T>::operator=(const Grilla<T>& otro){
+    vector_.operator =(otro.vector_);
+    return *this;
+}
 
 template <class T>
 Nat Grilla<T> :: CantColumnas () const{
@@ -72,6 +84,12 @@ const T& Grilla<T> :: operator() (Nat i, Nat j) const {
 	assert (j < CantColumnas());
     return vector_[i][j];
 }
+template <class T>
+T& Grilla<T> :: operator() (Nat i, Nat j) {
+    assert (i < CantFilas());
+    assert (j < CantColumnas());
+    return vector_[i][j];
+}
 
 
 template <class T>
@@ -80,3 +98,13 @@ std::ostream& operator << (std::ostream& os, const Grilla<T>& g)
   return Mostrar(os, g.vector_, '<', '>');
 }
 
+template<class T>
+bool operator==(const Grilla<T>& g, const Grilla<T>& w) {
+    bool retval = (g.CantColumnas() == w.CantColumnas() && g.CantFilas() == w.CantFilas());
+    for(Nat i = 0; i < g.CantFilas() && retval; ++i) {
+        for(Nat j = 0; j < g.CantColumnas() && retval; ++j) {
+        retval = g(i,j) == w(i,j);
+        }
+    }
+    return retval;
+}
