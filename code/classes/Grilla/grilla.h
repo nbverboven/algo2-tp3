@@ -1,5 +1,4 @@
-#include "../../TiposJuego.h"
-#include "../aed2/aed2/Vector.h"
+#include "../aed2/aed2.h"
 #include <iostream>
 #include <cassert>
 
