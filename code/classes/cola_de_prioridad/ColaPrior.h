@@ -13,7 +13,7 @@ namespace aed2
    * Implementación del módulo Cola de Prioridad(alpha). 
    * Se reemplaza alpha por T, del cual se asume que posee un 
    * constructor por copia, una función de igualdad y una relación de 
-   * orden total <=.
+   * orden total estricto <.
    */
   template <class T>
   class ColaPrior
