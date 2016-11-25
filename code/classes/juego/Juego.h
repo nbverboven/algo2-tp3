@@ -1,4 +1,5 @@
-#include "classes/aed2/aed2.h"
+#include "../aed2/aed2.h"
+
 using namespace aed2;
 using namespace std;
 
@@ -12,7 +13,7 @@ class Juego
 
     // Generadores
     void AgregarPokemon(const Pokemon poke, const Coordenada coord);
-    void AgregarJugador();
+    const Nat AgregarJugador();
     void Conectarse(const Jugador jug, Coordenada coord);
     void Desconectarse(const Jugador jug);
     void Moverse(const Jugador jug, const Coordenada coord);
@@ -20,19 +21,19 @@ class Juego
     // Observadores básicos
     const Mapa Mapa() const;
     const Conj<Jugador>::const_Iterador Jugadores() const;
-    const bool EstaConectado(const Juagdor jug) const;
+    const bool EstaConectado(const Jugador jug) const;
     const Nat Sanciones(const Jugador jug) const;
     const Coordenada Posicion(const Jugador jug) const;
-    const Vector< tuple<Pokemon, Nat> > Pokemons(const Jugador jug) const;
-    const Vector< Jugador > Expulsados() const;
-    const Vector< Coordenada > PosConPokemons() const;
+    const Lista< TuplaPokeNat>::Iterador Pokemons(const Jugador jug) const;
+    const Conj<Jugador> Expulsados() const;
+    const Conj<Coordenada> PosConPokemons() const;
     const Pokemon PokemonEnPos(const Coordenada coord) const;
     const Nat CantMovimientosParaCaptura(const Coordenada coord) const;
  
     // Otras operaciones
     const Jugador ProxID() const;
-    const Lista<Jugador> JugadoresConectados() const;
-    const Lista<Jugador> SoloLosConectados(const Conj<Jugador> jugadores) const;
+    const Conj<Jugador> JugadoresConectados() const;
+    const Conj<Jugador> SoloLosConectados(const Conj<Jugador> jugadores) const;
     const bool PuedoAgregarPokemon(const Coordenada coord) const;
     const Conj<bool> HayPokemonEnTerritorio(const Coordenada coord, const Conj<Coordenada> conjCoord) const;
     const bool DebeSancionarse(const Jugador jug, const Coordenada coord) const;
@@ -64,20 +65,40 @@ class Juego
 
     struct posStruct
     {       
-        ColaPrior< tuple<Nat, Jugador> > jugadores;
+        ColaPrior< TuplaNatJug > jugadores;
         pokemonACapturar* pokemonACapturar;
     };
 
     struct pokemonACapturar
     {
-        pokemonACapturar(const Pokemon poke, Conj<Coordenada>::const_Iterador itCoord, ColaPrior< tuple<Nat, Jugador> > &jugACapturarlo);
+        pokemonACapturar(const Pokemon poke, Conj<Coordenada>::const_Iterador itCoord, ColaPrior< TuplaNatJug > &jugACapturarlo);
 
         Pokemon pokemon;
         Nat movAfuera;
         Conj<Coordenada>::Iterador itCoord;
-        ColaPrior< tuple<Nat, Jugador> > jugACapturarlo;
+        ColaPrior< TuplaNatJug > jugACapturarlo;
     };
-
+    struct TuplaNatJug
+    {
+        TuplaNatJug(const Nat& p, const Jugador& s) : cant_(p), jug_(s) {}
+        TuplaNatJug(const TuplaNatJug otra) { cant_ = otra.cant_, jug_ = otra.jug_; }
+        const Nat& cant() const { return cant_; }
+        const Jugador& jug() const { return jug_; }
+        bool operator<(const TuplaNatJug& otra) const { return cant_ < otra.cant_ || jug_ < otra.jug_; }
+        bool operator==(const TuplaNatJug& otra) const { return cant_ == otra.cant_ && jug_ == otra.jug_; }
+        Nat cant_;
+        Jugador jug_;
+    };
+    struct TuplaPokeNat
+    {
+        TuplaPokeNat(const Pokemon& p, const Nat& s) : poke_(p), cant_(s) {}
+        TuplaPokeNat(const TuplaPokeNat otra) { poke_ = otra.poke_, cant_ = otra.cant_; }
+        const Pokemon& poke() const { return poke_; }
+        const Nat& cant() const { return cant_; }
+        bool operator==(const TuplaPokeNat& otra) const { return poke_ == otra.poke_ && cant_ == otra.cant_; }
+        Pokemon poke_;
+        Nat cant_;
+    };
     struct jugadorStruct
     {
         jugadorStruct(Conj<Jugador>::Iterador itNoExpulsados);
@@ -85,16 +106,16 @@ class Juego
         bool conectado;
         Nat sanciones;
         Coordenada pos;
-        Dicc<Pokemon,Nat> pokemones;
-        DiccString< Pokemon, Lista< tuple<Pokemon, Nat> >::Iterador > itPokemones;
+        Lista <TuplaPokeNat> pokemones;
+        DiccString< Pokemon, Lista< TuplaPokeNat>::Iterador > itPokemones;
         Nat pokemonesTotales;
-        Conj<jugador>::Iterador itJugNoExpulsados;
-        ColaPrior< tuple<Nat, Jugador> >::ItColaPrior itPosJug;
-        ColaPrior< tuple<Nat, Jugador> >::ItColaPrior itCapturarPoke;
+        Conj<Jugador>::Iterador itJugNoExpulsados;
+        ColaPrior< TuplaNatJug >::ItColaPrior itPosJug;
+        ColaPrior< TuplaNatJug>::ItColaPrior itCapturarPoke;
     };
 
     Mapa mapa;
-    Conj<Jugador> jgNoExpulsados;
+    Conj<Jugador> jugNoExpulsados;
     Vector<jugadorStruct> jugadores;
     Conj<Coordenada> posConPokemones;
     DiccString<Pokemon, Nat> pokemonesSalvajes;
