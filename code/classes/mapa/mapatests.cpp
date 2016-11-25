@@ -4,15 +4,20 @@
 #include "../../mini_test.h"
 
 
-void test_MapaVacio() {
+void test_MapaVacio()
+{
 	Mapa m;
+
 	ASSERT_EQ(m.Coordenadas().EsVacio(),true);
 	ASSERT_EQ(m.MaxLongitud(),0);
 	ASSERT_EQ(m.MaxLatitud(),0)
 }
 
-void test_agregarCoordenada() {
+
+void test_agregarCoordenada()
+{
 	Mapa m;
+
 	Coordenada a(1,1);
 	Coordenada b(1,2);
 	Coordenada c(1,3);
@@ -25,18 +30,23 @@ void test_agregarCoordenada() {
 	m.AgregarCoordenada(c);
 	m.AgregarCoordenada(d);
 	m.AgregarCoordenada(e);
+
 	ASSERT_EQ(m.PosicionExistente(a),true);
 	ASSERT_EQ(m.PosicionExistente(f),false);
-	}
+}
 
-void test_Coordenadas() {
+
+void test_Coordenadas()
+{
 	Mapa m;
+
 	Coordenada a(13,1);
 	Coordenada b(11,24);
 	Coordenada c(10,3);
 	Coordenada e(7,10);
 	Coordenada d(2,2);
 	Coordenada f(20,2);
+
 	m.AgregarCoordenada(a);
 	m.AgregarCoordenada(b);
 	m.AgregarCoordenada(c);
@@ -46,23 +56,29 @@ void test_Coordenadas() {
 	m.AgregarCoordenada(d);
 	m.AgregarCoordenada(e);
 	m.AgregarCoordenada(f);
+
 	ASSERT_EQ(m.Coordenadas().Cardinal(),6)
 }
 
-void test_posicionExistente() {
+
+void test_posicionExistente()
+{
 	Mapa m;
+
 	Coordenada a(13,1);
 	Coordenada b(11,24);
 	Coordenada c(10,3);
 	Coordenada e(7,10);
 	Coordenada d(2,2);
 	Coordenada f(20,2);
+
 	m.AgregarCoordenada(a);
 	m.AgregarCoordenada(b);
 	m.AgregarCoordenada(c);
 	m.AgregarCoordenada(e);
 	m.AgregarCoordenada(a);
 	m.AgregarCoordenada(b);
+
 	ASSERT_EQ(m.PosicionExistente(a),true);
 	ASSERT_EQ(m.PosicionExistente(b),true);
 	ASSERT_EQ(m.PosicionExistente(c),true);
@@ -70,8 +86,12 @@ void test_posicionExistente() {
 	ASSERT_EQ(m.PosicionExistente(e),true);
 	ASSERT_EQ(m.PosicionExistente(f),false);
 }
-void test_HayCamino(){
+
+
+void test_HayCamino()
+{
 	Mapa m;
+
 	Coordenada a(13,1);
 	Coordenada b(11,24);
 	Coordenada c(10,3);
@@ -84,6 +104,7 @@ void test_HayCamino(){
 	Coordenada j(1,10);
 	Coordenada k(2,2);
 	Coordenada l(20,2);
+
 	m.AgregarCoordenada(a);
 	m.AgregarCoordenada(b);
 	m.AgregarCoordenada(c);
@@ -96,15 +117,15 @@ void test_HayCamino(){
 	m.AgregarCoordenada(j);
 	m.AgregarCoordenada(k);
 	m.AgregarCoordenada(l);
+
 	Mapa z;
-	z=m;
+	z = m;
+
 	ASSERT_EQ(z.HayCamino(a,b),false);
 	ASSERT_EQ(z.HayCamino(g,h),true);
 	ASSERT_EQ(z.HayCamino(g,i),true);
 	ASSERT_EQ(z.HayCamino(g,k),true);
 	ASSERT_EQ(z.HayCamino(a,l),false);
-	
-
 }
 
 
@@ -116,6 +137,5 @@ int main()
     RUN_TEST(test_posicionExistente);
     RUN_TEST(test_HayCamino);
     
-
     return 0;
 }
