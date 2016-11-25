@@ -17,11 +17,7 @@
 #include "aed2/Dicc.h"
 #include "aed2/Conj.h"
 #include "aed2/ConjAcotado.h"
-#include "../cola_de_prioridad/ColaPrior.h"
-#include "../coordenada/Coordenada.h"
-#include "../diccionario_string/DiccString.h"
-#include "../Grilla/grilla.h"
-#include "../mapa/Mapa.h"
+
 
 using namespace aed2;
 
