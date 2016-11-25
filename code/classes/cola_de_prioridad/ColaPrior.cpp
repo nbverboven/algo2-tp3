@@ -16,7 +16,7 @@ ColaPrior<T>::ColaPrior()
 template <class T>
 ColaPrior<T>::~ColaPrior()
 {
-	// delete CP_raiz_;
+	delete CP_raiz_;
 }
 
 
@@ -39,7 +39,6 @@ typename ColaPrior<T>::ItColaPrior ColaPrior<T>::encolar(const T& elem)
 {
 	typename ColaPrior<T>::ItColaPrior it = crearIt();
 	it.agregarAlFinal(elem);
-	it.siftUp();
 
 	return it;
 }
@@ -49,7 +48,6 @@ template <class T>
 void ColaPrior<T>::desencolar()
 {
 	crearIt().eliminarSiguiente();
-	// it.siftDown();
 }
 
 
@@ -101,51 +99,49 @@ void ColaPrior<T>::ItColaPrior::eliminarSiguiente()
 		typename ColaPrior<T>::Nodo* tmp = itCP_colaP_->CP_raiz_;
 		itCP_colaP_->CP_raiz_ = NULL;
 
-		// delete tmp;
+		delete tmp;
+
+		// Actualizo el tamaño de la cola
+		itCP_colaP_->CP_tamanio_ -= 1;
 	}
 	else
 	{
-		// typename ColaPrior<T>::Nodo* primero = itCP_colaP_->CP_raiz_;
 		typename ColaPrior<T>::Nodo* ultimo = (itCP_colaP_->CP_raiz_)->nodoCP_anterior_;
-		typename ColaPrior<T>::Nodo* ult_padre = (ultimo->nodoCP_padre_);
 
 		// Intercambio el nodo que quiero eliminar con el último.
 		// Luego de esto, el siguiente del iterador apunta al último
 		// elemento del heap.
 		swap(itCP_siguiente_, ultimo);
+		
+		typename ColaPrior<T>::Nodo* ult_padre = (itCP_siguiente_->nodoCP_padre_);
 
 		// Reencadeno los nodos anterior y siguiente del que ahora
-		// voy a eliminar,
+		// voy a eliminar
 		(itCP_siguiente_->nodoCP_anterior_)->nodoCP_siguiente_ = (itCP_siguiente_->nodoCP_siguiente_);
 		(itCP_siguiente_->nodoCP_siguiente_)->nodoCP_anterior_ = (itCP_siguiente_->nodoCP_anterior_);
 
 		// El padre del último va a perder un hijo. Veo cuál
-		if ( ult_padre != NULL )
+		if ( ult_padre->nodoCP_hijoD_ == itCP_siguiente_ )
 		{
-			if ( ult_padre->nodoCP_hijoD_ == itCP_siguiente_ )
-			{
-				ult_padre->nodoCP_hijoD_ = NULL;
-			}
-			else
-			{
-				ult_padre->nodoCP_hijoI_ = NULL;
-			}
+			ult_padre->nodoCP_hijoD_ = NULL;
+		}
+		else
+		{
+			ult_padre->nodoCP_hijoI_ = NULL;
 		}
 
-		// delete ultimo;
+		delete itCP_siguiente_;
 
 		// Hago que el siguiente del iterador apunte al elemento que 
 		// rompe el invariante de minHeap
 		itCP_siguiente_ = ultimo;
 
+		// Actualizo el tamaño de la cola
+		itCP_colaP_->CP_tamanio_ -= 1;
+
 		// Restauro el invariante
 		siftDown();
-
-
 	}
-
-	// Actualizo el tamaño de la cola
-	itCP_colaP_->CP_tamanio_ -= 1;
 }
 
 
@@ -156,7 +152,7 @@ void ColaPrior<T>::ItColaPrior::siftDown()
 	typename ColaPrior<T>::Nodo* izq = itCP_siguiente_->nodoCP_hijoI_;
 	typename ColaPrior<T>::Nodo* min;
 
-	if ( izq != NULL && *(itCP_siguiente_->nodoCP_dato_) > *(izq->nodoCP_dato_) )
+	if ( izq != NULL && ( *(itCP_siguiente_->nodoCP_dato_) > *(izq->nodoCP_dato_) ) )
 	{
 		min = izq;
 	}
@@ -217,53 +213,140 @@ void ColaPrior<T>::ItColaPrior::swap(typename ColaPrior<T>::Nodo* un_nodo, typen
 		{
 			typename ColaPrior<T>::Nodo* otro_nodo_rchild = otro_nodo->nodoCP_hijoD_;
 			typename ColaPrior<T>::Nodo* otro_nodo_lchild = otro_nodo->nodoCP_hijoI_;
+			typename ColaPrior<T>::Nodo* otro_nodo_parent = otro_nodo->nodoCP_padre_;
+
+			typename ColaPrior<T>::Nodo* un_nodo_rchild = un_nodo->nodoCP_hijoD_;
+			typename ColaPrior<T>::Nodo* un_nodo_lchild = un_nodo->nodoCP_hijoI_;
 
 			un_nodo->nodoCP_padre_ = otro_nodo->nodoCP_padre_;
 			otro_nodo->nodoCP_padre_ = un_nodo;
 			otro_nodo->nodoCP_hijoD_ = un_nodo->nodoCP_hijoD_;
 			otro_nodo->nodoCP_hijoI_ = un_nodo->nodoCP_hijoI_;
 
+			// Actualizo el padre del padre
+			if ( otro_nodo_parent != NULL )
+			{
+				if ( otro_nodo_parent->nodoCP_hijoI_ == otro_nodo )
+				{
+					otro_nodo_parent->nodoCP_hijoI_ = un_nodo;
+				}
+				else
+				{
+					otro_nodo_parent->nodoCP_hijoD_ = un_nodo;
+				}
+			}
+
+			// Actualizo los hijos del primer nodo
+			if ( un_nodo_rchild != NULL )
+			{
+				un_nodo_rchild->nodoCP_padre_ = otro_nodo;
+			}
+
+			if ( un_nodo_lchild != NULL )
+			{
+				un_nodo_lchild->nodoCP_padre_ = otro_nodo;
+			}
+
+			// Actualizo los que eran hijos del segundo nodo
 			if ( otro_nodo_lchild == un_nodo )
 			{
 				un_nodo->nodoCP_hijoD_ = otro_nodo_rchild;
 				un_nodo->nodoCP_hijoI_ = otro_nodo;
+
+				// Actualizo el padre del otro hijo.
+				if ( otro_nodo_rchild != NULL )
+				{
+					otro_nodo_rchild->nodoCP_padre_ = un_nodo;
+				}
 			}
 			else
 			{
 				un_nodo->nodoCP_hijoD_ = otro_nodo;
 				un_nodo->nodoCP_hijoI_ = otro_nodo_lchild;
+
+				// Actualizo el padre del otro hijo.
+				if ( otro_nodo_lchild != NULL )
+				{
+					otro_nodo_lchild->nodoCP_padre_ = un_nodo;
+				}
 			}
 		}
 		else
 		{
-			// Me fijo si un_nodo es el padre de otro_nodo
+			// otro_nodo no era el padre de un_nodo.
+			// Me fijo si es al revés.
 			if ( otro_nodo->nodoCP_padre_ == un_nodo )
 			{
 				typename ColaPrior<T>::Nodo* un_nodo_rchild = un_nodo->nodoCP_hijoD_;
 				typename ColaPrior<T>::Nodo* un_nodo_lchild = un_nodo->nodoCP_hijoI_;
+				typename ColaPrior<T>::Nodo* un_nodo_parent = un_nodo->nodoCP_padre_;
+
+				typename ColaPrior<T>::Nodo* otro_nodo_rchild = otro_nodo->nodoCP_hijoD_;
+				typename ColaPrior<T>::Nodo* otro_nodo_lchild = otro_nodo->nodoCP_hijoI_;
 
 				otro_nodo->nodoCP_padre_ = un_nodo->nodoCP_padre_;
 				un_nodo->nodoCP_padre_ = otro_nodo;
 				un_nodo->nodoCP_hijoD_ = otro_nodo->nodoCP_hijoD_;
 				un_nodo->nodoCP_hijoI_ = otro_nodo->nodoCP_hijoI_;
 
+				// Actualizo el padre del padre
+				if ( un_nodo_parent != NULL )
+				{
+					if ( un_nodo_parent->nodoCP_hijoI_ == un_nodo )
+					{
+						un_nodo_parent->nodoCP_hijoI_ = otro_nodo;
+					}
+					else
+					{
+						un_nodo_parent->nodoCP_hijoD_ = otro_nodo;
+					}
+				}
+
+				// Actualizo los hijos del segundo nodo
+				if ( otro_nodo_rchild != NULL )
+				{
+					otro_nodo_rchild->nodoCP_padre_ = un_nodo;
+				}
+
+				if ( otro_nodo_lchild != NULL )
+				{
+					otro_nodo_lchild->nodoCP_padre_ = un_nodo;
+				}
+
+				// Actualizo los que eran hijos del primer nodo
 				if ( un_nodo_lchild == otro_nodo )
 				{
 					otro_nodo->nodoCP_hijoD_ = un_nodo_rchild;
 					otro_nodo->nodoCP_hijoI_ = un_nodo;
+
+					// Actualizo el padre del otro hijo.
+					if ( un_nodo_rchild != NULL )
+					{
+						un_nodo_rchild->nodoCP_padre_ = otro_nodo;
+					}
 				}
 				else
 				{
 					otro_nodo->nodoCP_hijoD_ = un_nodo;
 					otro_nodo->nodoCP_hijoI_ = un_nodo_lchild;
+
+					// Actualizo el padre del otro hijo.
+					if ( un_nodo_lchild != NULL )
+					{
+						un_nodo_lchild->nodoCP_padre_ = otro_nodo;
+					}
 				}
 			}
 			else
 			{
-				// Guardo los nodos a los que apunta un_nodo
+				// Guardo los nodos a los que apunta cada nodo
 				typename ColaPrior<T>::Nodo* un_nodo_parent = un_nodo->nodoCP_padre_;
 				typename ColaPrior<T>::Nodo* un_nodo_rchild = un_nodo->nodoCP_hijoD_;
 				typename ColaPrior<T>::Nodo* un_nodo_lchild = un_nodo->nodoCP_hijoI_;
+
+				typename ColaPrior<T>::Nodo* otro_nodo_parent = otro_nodo->nodoCP_padre_;
+				typename ColaPrior<T>::Nodo* otro_nodo_rchild = otro_nodo->nodoCP_hijoD_;
+				typename ColaPrior<T>::Nodo* otro_nodo_lchild = otro_nodo->nodoCP_hijoI_;
 
 				// Ubico a un_nodo en la posición que anteriormente correspondía 
 				// a otro_nodo
@@ -276,6 +359,52 @@ void ColaPrior<T>::ItColaPrior::swap(typename ColaPrior<T>::Nodo* un_nodo, typen
 				otro_nodo->nodoCP_padre_ = un_nodo_parent; 
 				otro_nodo->nodoCP_hijoD_ = un_nodo_rchild;
 				otro_nodo->nodoCP_hijoI_ = un_nodo_lchild;
+
+				// Actualizo el que era padre de un_nodo y los que eran sus hijos
+				if ( un_nodo_parent != NULL )
+				{
+					if ( un_nodo_parent->nodoCP_hijoI_ == un_nodo )
+					{
+						un_nodo_parent->nodoCP_hijoI_ = otro_nodo;
+					}
+					else
+					{
+						un_nodo_parent->nodoCP_hijoD_ = otro_nodo;
+					}
+				}
+
+				if ( un_nodo_rchild != NULL )
+				{
+					un_nodo_rchild->nodoCP_padre_ = otro_nodo;
+				}
+
+				if ( un_nodo_lchild != NULL )
+				{
+					un_nodo_lchild->nodoCP_padre_ = otro_nodo;
+				}
+
+				// Actualizo el que era padre de otro_nodo y los que eran sus hijos
+				if ( otro_nodo_parent != NULL )
+				{
+					if ( otro_nodo_parent->nodoCP_hijoI_ == otro_nodo )
+					{
+						otro_nodo_parent->nodoCP_hijoI_ = un_nodo;
+					}
+					else
+					{
+						otro_nodo_parent->nodoCP_hijoD_ = un_nodo;
+					}
+				}
+
+				if ( otro_nodo_rchild != NULL )
+				{
+					otro_nodo_rchild->nodoCP_padre_ = un_nodo;
+				}
+
+				if ( otro_nodo_lchild != NULL )
+				{
+					otro_nodo_lchild->nodoCP_padre_ = un_nodo;
+				}
 			}
 		}
 
@@ -284,7 +413,8 @@ void ColaPrior<T>::ItColaPrior::swap(typename ColaPrior<T>::Nodo* un_nodo, typen
 
 		if ( itCP_colaP_->CP_tamanio_ > 2 )
 		{
-			// Me fijo si otro_nodo es el anterior de un_nodo
+			// Me fijo si otro_nodo es el anterior de un_nodo.
+			// En este caso, el siguiente de otro_nodo es un_nodo.
 			if ( un_nodo->nodoCP_anterior_ == otro_nodo )
 			{
 				typename ColaPrior<T>::Nodo* otro_nodo_prev = otro_nodo->nodoCP_anterior_;
@@ -301,7 +431,8 @@ void ColaPrior<T>::ItColaPrior::swap(typename ColaPrior<T>::Nodo* un_nodo, typen
 			}
 			else
 			{
-				// Me fijo si un_nodo es el anterior de otro_nodo
+				// Me fijo si un_nodo es el anterior de otro_nodo.
+				// En este caso, el siguiente de un_nodo es otro_nodo.
 				if ( otro_nodo->nodoCP_anterior_ == un_nodo )
 				{
 					typename ColaPrior<T>::Nodo* un_nodo_prev = un_nodo->nodoCP_anterior_;
@@ -342,10 +473,7 @@ void ColaPrior<T>::ItColaPrior::swap(typename ColaPrior<T>::Nodo* un_nodo, typen
 				}
 			}
 		}
-
-
 	}
-
 }
 
 
@@ -399,6 +527,7 @@ void ColaPrior<T>::ItColaPrior::agregarAlFinal(const T& elem)
 	(nuevo->nodoCP_siguiente_)->nodoCP_anterior_ = nuevo;
 	itCP_siguiente_ = nuevo;
 	itCP_colaP_->CP_tamanio_ += 1;
+	siftUp();
 }
 
 
@@ -438,4 +567,7 @@ std::ostream& operator<<(std::ostream& os, ColaPrior<T>& cola)
 	}
 
 	os << ']' << '\n';
+
+	return os;
 }
+
