@@ -1,34 +1,37 @@
-#include "classes/aed2/aed2.h"
+#ifndef COORDENADA_H
+#define COORDENADA_H
+
+#include "../aed2/aed2.h"
 #include <cmath>
 using namespace aed2;
 using namespace std;
 
 class Coordenada
 {
-
   public:
     
     // Constructor y destructor
-    Coordenada(const Nat x, const Nat y); //CrearCoordenda
+    Coordenada(const Nat& x, const Nat& y); //CrearCoordenda
     ~Coordenada();
 
     // Observadores básicos
-    const Nat& Latitud() const;
-    const Nat& Longitud() const;
+    Nat Latitud() const;
+    Nat Longitud() const;
 
     // Otras operaciones
-    static Nat distEuclidea(const Coordenada coord1, const Coordenada coord2) const; 
     Coordenada CoordenadaArriba() const;
     Coordenada CoordenadaAbajo() const;
     Coordenada CoordenadaALaDerecha() const;
     Coordenada CoordenadaALaIzquierda() const;
+    
+    static Nat distEuclidea(const Coordenada& coord1, const Coordenada& coord2); 
 
     // Operadores
     bool operator==(const Coordenada &otra) const;
     bool operator!=(const Coordenada &otra) const;
 
     // Asignacion
-    //Coordenada &operator=(const Coordenada &aCopiar);
+    Coordenada& operator=(const Coordenada& aCopiar);
 
     /*friend ostream& operator<<(ostream& os) {
         return os;
@@ -36,10 +39,11 @@ class Coordenada
 
   private:
   
-    Nat latitud;
-    Nat longitud;
+    Nat latitud_;
+    Nat longitud_;
 
     // Funciones auxiliares
 
-
 };
+
+#endif /* COORDENADA_H */
