@@ -15,6 +15,7 @@ template<class T>
             Grilla();
             Grilla(const Grilla<T>& otro);
             Grilla<T>& operator=(const Grilla<T>& otro);
+            bool EsVacio() const;
             void AgregarColumnas(const Nat n,const T& elem);
             void AgregarFilas(const Nat n,const T& elem);
             Nat CantFilas() const;
@@ -38,6 +39,11 @@ template<class T>
 Grilla<T>& Grilla<T>::operator=(const Grilla<T>& otro){
     vector_.operator =(otro.vector_);
     return *this;
+}
+
+template<class T>
+bool Grilla<T>::EsVacio() const {
+    return vector_.Longitud()==0;
 }
 
 template <class T>
