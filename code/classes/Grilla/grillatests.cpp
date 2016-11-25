@@ -38,7 +38,6 @@ void test_agregarColumnas() {
 	g.AgregarColumnas(2,0);
 	ASSERT_EQ(g.CantFilas(),4);
 	ASSERT_EQ(g.CantColumnas(),3);
-	std::cout<<g;
 	Grilla <Nat> f;
 	f = g;
 	ASSERT_EQ(f==g,true);
