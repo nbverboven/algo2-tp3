@@ -6,11 +6,12 @@
 #include <cassert>
 
 
+
 namespace aed2
 {
   /*
    * Implementación del módulo Cola de Prioridad(alpha). 
-   * Se reemplaza alpha por T(u vieja), del cual se asume que posee un 
+   * Se reemplaza alpha por T, del cual se asume que posee un 
    * constructor por copia, una función de igualdad y una relación de 
    * orden total <=.
    */
