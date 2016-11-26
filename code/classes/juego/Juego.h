@@ -129,3 +129,4 @@ class Juego
     void capturarPokemon(const Jugador jug, const Pokemon poke);
     
 };
+
