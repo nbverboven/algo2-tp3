@@ -1,6 +1,46 @@
 #include "Juego.h"
 
 
+/********************************************************************************
+*********                    IMPLEMENTACIÓN DE TUPLA                    *********
+*********************************************************************************/
+
+template <class P, class S>
+Juego::Tupla::Tupla(const P& prim, const S& seg)
+    : tupla_prm(prim), tupla_sgd(seg)
+{}
+
+
+template <class P, class S>
+const P& Juego::Tupla::primero() const
+{
+    return tupla_prm;
+}
+
+
+template <class P, class S>
+const S& Juego::Tupla::segundo() const
+{
+    return tupla_sgd;
+}
+
+
+template <class P, class S>
+bool Juego::Tupla::operator<(const Tupla& otra) const
+{
+    return tupla_prm < otra.tupla_prm || tupla_sgd < otra.tupla_sgd;
+}
+
+
+template <class P, class S>
+bool Juego::Tupla::operator==(const Tupla& otra) const
+{
+    return tupla_prm == otra.tupla_prm && tupla_sgd == otra.tupla_sgd;
+}
+
+
+
+
 
 // Constructor
 Juego::Juego() 
@@ -41,7 +81,7 @@ void Juego::AgregarPokemon(const Pokemon& poke, const Coordenada& coord)
 
 }
 
-Nat Juego::AgregarJugador(const Jugador& jugador)
+Nat Juego::AgregarJugador()
 {
     jugadores.AgregarAtras(jugador);
     Conj<Coordenada>::Iterador itNoExpulsados = jugNoExpulsados.AgregarRapido(jugador);
@@ -162,7 +202,7 @@ void Juego::Moverse(const Jugador& jug, const Coordenada& coord)
 *********                     OBSERVADORES BÁSICOS                      *********
 *********************************************************************************/
 
-Mapa Juego::Mapa() const
+const Mapa& Juego::mapa() const
 {
     return mapa;
 }

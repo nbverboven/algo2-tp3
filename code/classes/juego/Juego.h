@@ -15,12 +15,10 @@ using namespace std;
 class Juego
 {
 
-public:
+  public:
 
     // Forward declarations
-    struct TuplaPokeNat;
-    struct TuplaNatJug;
-    struct JugadorStruct;
+    class Tupla;
 
     // Constructor y destructor
     Juego(); //CrearJuego
@@ -28,13 +26,13 @@ public:
 
     // Generadores
     void AgregarPokemon(const Pokemon& poke, const Coordenada& coord);
-    Nat AgregarJugador(const Jugador& jugador);
+    Nat AgregarJugador();
     void Conectarse(const Jugador& jug, Coordenada coord);
     void Desconectarse(const Jugador& jug);
     void Moverse(const Jugador& jug, const Coordenada& coord);
 
     // Observadores básicos
-    Mapa Mapa() const;
+    const Mapa& mapa() const;
     Conj<Jugador>::const_Iterador Jugadores() const;
     bool EstaConectado(const Jugador& jug) const;
     Nat Sanciones(const Jugador& jug) const;
@@ -66,11 +64,36 @@ public:
     Conj<Coordenada> BuscarPokemonsCercanos(const Coordenada& coord, const Conj<Coordenada>& conjCoord) const;
     Nat CantMismaEspecie(const Pokemon poke, const Conj<Pokemon>& pokemones) const;
 
-    /*friend ostream& operator<<(ostream& os) {
-        return os;
-    }*/
+    
+    /* 
+     * Defino una tupla de tipos genéricos porque si es privada, hay funciones que no puedo
+     * usar afuera de la clase. Por ejemplo, en Juego::Pokemons() no podría ver ni el pokemon 
+     * ni la cantidad del siguiente del iterador.
+     * Se asume que, tanto P como S, tienen definida la igualdad y una relación de orden total
+     * estricto.
+     */
+    template <class P, class S>
+    class Tupla
+    {
+      public:
 
-private:
+        Tupla(const P& prim, const S& seg);
+
+        const P& primero() const;
+        const S& segundo() const;
+
+        bool operator<(const Tupla& otra) const ;
+        bool operator==(const Tupla& otra) const;
+
+      private:
+
+        P tupla_prm_;
+        S tupla_sgd_;
+    };
+
+
+
+  private:
 
     /*struct pokemonCapturado
     {
@@ -94,28 +117,28 @@ private:
         ColaPrior< TuplaNatJug > jugACapturarlo;
     };
 
-    struct TuplaNatJug
-    {
-        TuplaNatJug(const Nat& p, const Jugador& s) : cant_(p), jug_(s) {}
-        TuplaNatJug(const TuplaNatJug& otra) { cant_ = otra.cant_, jug_ = otra.jug_; }
-        const Nat& cant() const { return cant_; }
-        const Jugador& jug() const { return jug_; }
-        bool operator<(const TuplaNatJug& otra) const { return cant_ < otra.cant_ || jug_ < otra.jug_; }
-        bool operator==(const TuplaNatJug& otra) const { return cant_ == otra.cant_ && jug_ == otra.jug_; }
-        Nat cant_;
-        Jugador jug_;
-    };
+    // struct TuplaNatJug
+    // {
+    //     TuplaNatJug(const Nat& p, const Jugador& s) : cant_(p), jug_(s) {}
+    //     TuplaNatJug(const TuplaNatJug& otra) { cant_ = otra.cant_, jug_ = otra.jug_; }
+    //     const Nat& cant() const { return cant_; }
+    //     const Jugador& jug() const { return jug_; }
+    //     bool operator<(const TuplaNatJug& otra) const { return cant_ < otra.cant_ || jug_ < otra.jug_; }
+    //     bool operator==(const TuplaNatJug& otra) const { return cant_ == otra.cant_ && jug_ == otra.jug_; }
+    //     Nat cant_;
+    //     Jugador jug_;
+    // };
 
-    struct TuplaPokeNat
-    {
-        TuplaPokeNat(const Pokemon& p, const Nat& s) : poke_(p), cant_(s) {}
-        TuplaPokeNat(const TuplaPokeNat& otra) { poke_ = otra.poke_, cant_ = otra.cant_; }
-        const Pokemon& poke() const { return poke_; }
-        const Nat& cant() const { return cant_; }
-        bool operator==(const TuplaPokeNat& otra) const { return poke_ == otra.poke_ && cant_ == otra.cant_; }
-        Pokemon poke_;
-        Nat cant_;
-    };
+    // struct TuplaPokeNat
+    // {
+    //     TuplaPokeNat(const Pokemon& p, const Nat& s) : poke_(p), cant_(s) {}
+    //     TuplaPokeNat(const TuplaPokeNat& otra) { poke_ = otra.poke_, cant_ = otra.cant_; }
+    //     const Pokemon& poke() const { return poke_; }
+    //     const Nat& cant() const { return cant_; }
+    //     bool operator==(const TuplaPokeNat& otra) const { return poke_ == otra.poke_ && cant_ == otra.cant_; }
+    //     Pokemon poke_;
+    //     Nat cant_;
+    // };
 
     struct jugadorStruct
     {
