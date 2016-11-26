@@ -1,23 +1,34 @@
+#ifndef H_JUEGO
+#define H_JUEGO
+
 #include "../aed2/aed2.h"
 #include "../cola_de_prioridad/ColaPrior.h"
 #include "../coordenada/Coordenada.h"
 #include "../diccionario_string/DiccString.h"
 #include "../Grilla/grilla.h"
 #include "../mapa/Mapa.h"
+
 using namespace aed2;
 using namespace std;
+
 
 class Juego
 {
 
 public:
+
+    // Forward declarations
+    struct TuplaPokeNat;
+    struct TuplaNatJug;
+    struct JugadorStruct;
+
     // Constructor y destructor
     Juego(); //CrearJuego
     ~Juego();
 
     // Generadores
     void AgregarPokemon(const Pokemon& poke, const Coordenada& coord);
-    Nat AgregarJugador();
+    Nat AgregarJugador(const Jugador& jugador);
     void Conectarse(const Jugador& jug, Coordenada coord);
     void Desconectarse(const Jugador& jug);
     void Moverse(const Jugador& jug, const Coordenada& coord);
@@ -82,6 +93,7 @@ private:
         Conj<Coordenada>::Iterador itCoord;
         ColaPrior< TuplaNatJug > jugACapturarlo;
     };
+
     struct TuplaNatJug
     {
         TuplaNatJug(const Nat& p, const Jugador& s) : cant_(p), jug_(s) {}
@@ -93,6 +105,7 @@ private:
         Nat cant_;
         Jugador jug_;
     };
+
     struct TuplaPokeNat
     {
         TuplaPokeNat(const Pokemon& p, const Nat& s) : poke_(p), cant_(s) {}
@@ -103,6 +116,7 @@ private:
         Pokemon poke_;
         Nat cant_;
     };
+
     struct jugadorStruct
     {
         jugadorStruct(Conj<Jugador>::Iterador itNoExpulsados);
@@ -133,4 +147,7 @@ private:
     void capturarPokemon(const Jugador& jug, const Pokemon& poke);
     pokemonACapturar nuevoPokemonACapturar (const Pokemon& poke, Conj<Coordenada>::const_Iterador itCoord, ColaPrior<Juego::TuplaNatJug> jugACapturarlo);
     
-};
+}; /* class Juego */
+
+
+#endif /* H_JUEGO */
