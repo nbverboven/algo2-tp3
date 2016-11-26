@@ -22,7 +22,7 @@ Juego::~Juego()
 *********                        GENERADORES                            *********
 *********************************************************************************/
 
-void AgregarPokemon(const Pokemon poke, const Coordenada coord)
+void AgregarPokemon(const Pokemon& poke, const Coordenada& coord)
 {
     Nat nuevaCantPokemonTotal = Juego::CantPokemonsTotales()+1;
     Juego::CantPokemonsTotales() = nuevaCantPokemonTotal;
@@ -46,7 +46,7 @@ const Nat AgregarJugador()
     return Juego::jugadores.Longitud();
 }
 
-void Conectarse(const Jugador jug, Coordenada coord)
+void Conectarse(const Jugador& jug, Coordenada coord)
 {
     Juego::jugadores[jug].conectado=true;
     Juego::jugadores[jug].pos = coord;
@@ -60,7 +60,7 @@ void Conectarse(const Jugador jug, Coordenada coord)
     }
 }
 
-void Desconectarse(const Jugador jug)
+void Desconectarse(const Jugador& jug)
 {
     Juego::jugadores[jug].conectado=false;
     Juego::jugadores[jug].itPosJug.eliminarSiguiente();
@@ -69,7 +69,7 @@ void Desconectarse(const Jugador jug)
     }
 }
 
-void Moverse(const Jugador jug, const Coordenada coord)
+void Moverse(const Jugador& jug, const Coordenada& coord)
 {
     Juego::jugadorStruct jugador = Juego::jugadores[jug];
     Coordenada posAnterior = jugador.pos;
@@ -144,22 +144,22 @@ const Conj<Jugador>::const_Iterador Juego::Jugadores() const
     return Juego::jugNoExpulsados.CrearIt();
 }
 
-const bool Juego::EstaConectado(const Jugador jug) const
+const bool Juego::EstaConectado(const Jugador& jug) const
 {
     return Juego::jugadores[jug].conectado
 }
 
-const Nat Juego::Sanciones(const Jugador jug) const
+const Nat Juego::Sanciones(const Jugador& jug) const
 {
     return Juego::jugadores[jug].sanciones;
 }
 
-const Coordenada Juego::Posicion(const Jugador jug) const
+const Coordenada Juego::Posicion(const Jugador& jug) const
 {
     return Juego::jugadores[jug].pos;
 }
 
-const Lista::Iterador Juego::Pokemons(const Jugador jug) const
+const Lista::Iterador Juego::Pokemons(const Jugador& jug) const
 {
     return Juego::jugadores[jug].pokemones.CrearIt();
 }
@@ -182,12 +182,12 @@ const Conj<Coordenada> Juego::PosConPokemons() const
     return Juego::posConPokemones;
 }
 
-const Pokemon Juego::PokemonEnPos(const Coordenada coord) const
+const Pokemon Juego::PokemonEnPos(const Coordenada& coord) const
 {
     return Juego::posiciones[coord.Longitud()][coord.Latitud()].pokemonACapturar->pokemon;
 }
 
-const Nat Juego::CantMovimientosParaCaptura(const Coordenada coord) const
+const Nat Juego::CantMovimientosParaCaptura(const Coordenada& coord) const
 {
     return Juego::posiciones[coord.Longitud()][coord.Latitud()].pokemonACapturar->movAfuera;
 
@@ -219,7 +219,7 @@ const Conj<Jugador> Juego::JugadoresConectados() const
     return res;
 }
 
-const Conj<Jugador> Juego::SoloLosConectados(const Conj<Jugador> jugadores) const
+const Conj<Jugador> Juego::SoloLosConectados(const Conj<Jugador>& jugadores) const
 {
     Conj<Jugador> res;
     Conj::const_Iterador it = jugadores.CrearIt();
@@ -232,12 +232,12 @@ const Conj<Jugador> Juego::SoloLosConectados(const Conj<Jugador> jugadores) cons
     return res;
 }
 
-const bool Juego::PuedoAgregarPokemon(const Coordenada coord) const
+const bool Juego::PuedoAgregarPokemon(const Coordenada& coord) const
 {
     return !(HayPokemonCercano(coord));
 }
 
-const Conj<bool> Juego::HayPokemonEnTerritorio(const Coordenada coord, const Conj<Coordenada> conjCoord) const
+const Conj<bool> Juego::HayPokemonEnTerritorio(const Coordenada& coord, const Conj<Coordenada>& conjCoord) const
 {
     Conj<bool> res;
     Conj<bool>::const_Iterador it = conjCoord.CrearIt();
@@ -249,19 +249,19 @@ const Conj<bool> Juego::HayPokemonEnTerritorio(const Coordenada coord, const Con
     return res;
 }
 
-const bool Juego::DebeSancionarse(const Jugador jug, const Coordenada coord) const
+const bool Juego::DebeSancionarse(const Jugador& jug, const Coordenada& coord) const
 {
     Juego::jugadorStruct jugador = Juego::jugadores[jug];
     return !(Juego::mapa.HayCamino(jugador.pos,c) || Coordenada::distEuclidea(jugador.pos,c)>100);
 }
 
-const bool Juego::DebeExpulsarse(const Jugador jug, const Coordenada coord) const
+const bool Juego::DebeExpulsarse(const Jugador& jug, const Coordenada& coord) const
 {
     Juego::jugadorStruct jugador = Juego::jugadores[jug];
     return (DebeSancionarse(jug,coord) && jugador.sanciones>=4);
 }
 
-const Coordenada Juego::HayPokemonCercano(const Coordenada coord) const
+const Coordenada Juego::HayPokemonCercano(const Coordenada& coord) const
 {
     bool res = false;
     Nat lat = coord.Latitud();
@@ -289,7 +289,7 @@ const Coordenada Juego::HayPokemonCercano(const Coordenada coord) const
     return res;
 }
 
-const Coordenada Juego::PosPokemonCercano(const Coordenada coord) const
+const Coordenada Juego::PosPokemonCercano(const Coordenada& coord) const
 {
     Nat lat = coord.Latitud();
     Nat lon = coord.Longitud();
@@ -316,7 +316,7 @@ const Coordenada Juego::PosPokemonCercano(const Coordenada coord) const
     }
 }
 
-const Conj<Jugador> Juego::EntrenadoresPosibles(const Coordenada coord, const Conj<Jugador> jugadores) const
+const Conj<Jugador> Juego::EntrenadoresPosibles(const Coordenada& coord, const Conj<Jugador>& jugadores) const
 {
     Conj<Jugador> res;
     Conj<Jugador> ::const_Iterador it = jugadores.CrearIt();
@@ -331,7 +331,7 @@ const Conj<Jugador> Juego::EntrenadoresPosibles(const Coordenada coord, const Co
     return res;
 }
 
-const Conj<Coordenada> Juego::PosDePokemonsACapturar(const Coordenada coord, const Conj<Coordenada> conjCoord) const
+const Conj<Coordenada> Juego::PosDePokemonsACapturar(const Coordenada& coord, const Conj<Coordenada>& conjCoord) const
 {
     Conj<Coordenada> res;
     Conj<Coordenada> ::const_Iterador it= conjCoord.CrearIt();
@@ -345,7 +345,7 @@ const Conj<Coordenada> Juego::PosDePokemonsACapturar(const Coordenada coord, con
     return res;
 }
 
-const bool Juego::SeCapturo(const Coordenada coord1, const Coordenada coord2) const
+const bool Juego::SeCapturo(const Coordenada& coord1, const Coordenada& coord2) const
 {
     bool res = false;
     Juego::posStruct tupla = &Juego::posiciones[coord1.Latitud()][coord1.Longitud()];
@@ -362,7 +362,7 @@ const bool Juego::SeCapturo(const Coordenada coord1, const Coordenada coord2) co
     return res;
 }
 
-const Nat Juego::IndiceDeRareza(const Pokemon poke) const
+const Nat Juego::IndiceDeRareza(const Pokemon& poke) const
 {
     Nat cant =0;
     if(Juego::pokemonesSalvajes.Definido(poke)){
@@ -392,7 +392,7 @@ const Lista<Pokemon> Juego::TodosLosPokemons() const
 
 }
 
-const Lista<Pokemon> Juego::PokemonsSalvajes(const Conj<Coordenada> conjCoord) const
+const Lista<Pokemon> Juego::PokemonsSalvajes(const Conj<Coordenada>& conjCoord) const
 {
     Lista<Pokemon> res;
     Conj<Coordenada>::const_Iterador it = conjCoord.CrearIt();
@@ -408,7 +408,7 @@ const Lista<Pokemon> Juego::PokemonsSalvajes(const Conj<Coordenada> conjCoord) c
     return res;
 }
 
-const Lista<Pokemon> Juego::PokemonsCapturados(const Conj<Jugador> jugadores) const
+const Lista<Pokemon> Juego::PokemonsCapturados(const Conj<Jugador>&& jugadores) const
 {
     Lista<Pokemon> res;
     Lista<Pokemon> ::const_Iterador it = jugadores.CrearIt();
@@ -429,7 +429,7 @@ const Lista<Pokemon> Juego::PokemonsCapturados(const Conj<Jugador> jugadores) co
     return res;
 }
 
-const Conj<Coordenada> Juego::BuscarPokemonsCercanos(const Coordenada coord, const Conj<Coordenada> conjCoord) const
+const Conj<Coordenada> Juego::BuscarPokemonsCercanos(const Coordenada&& coord, const Conj<Coordenada>&& conjCoord) const
 {
     Conj<Coordenada> res;
     Conj<Coordenada>::const_Iterador it = conjCoord.CrearIt();
@@ -443,7 +443,7 @@ const Conj<Coordenada> Juego::BuscarPokemonsCercanos(const Coordenada coord, con
     return res;
 }
 
-const Nat Juego::CantMismaEspecie(const Pokemon poke, const Conj<Pokemon> pokemones) const
+const Nat Juego::CantMismaEspecie(const Pokemon&& poke, const Conj<Pokemon>&& pokemones) const
 {
     Nat cant=0;
     Conj<Pokemon>::const_Iterador it = pokemones.CrearIt();
@@ -465,7 +465,7 @@ const Nat Juego::CantMismaEspecie(const Pokemon poke, const Conj<Pokemon> pokemo
 *********                    FUNCIONES AUXILIARES                       *********
 *********************************************************************************/
 
-Arreglo< Arreglo<posStruct> > Juego::CrearPosiciones(const Mapa map)
+Arreglo< Arreglo<posStruct> > Juego::CrearPosiciones(const Mapa&& map)
 {
     Nat ancho = Juego::Mapa().MaxLatitud();
     Nat largo = Juego::Mapa().MaxLongitud();
@@ -478,7 +478,7 @@ Arreglo< Arreglo<posStruct> > Juego::CrearPosiciones(const Mapa map)
     }
 }
 
-void Juego::PosicionarPokemon(const Pokemon poke, const Coordenada coord, Conj<Coordenada>::const_Iterador itCoord)
+void Juego::PosicionarPokemon(const Pokemon&& poke, const Coordenada&& coord, Conj<Coordenada>::const_Iterador itCoord)
 {
     Juego::posStruct tupla = &Juego::posiciones[coord.Latitud()][coord.Longitud()];
     ColaPrior< TuplaNatJug > jugACapturarlo;
@@ -513,7 +513,7 @@ void Juego::PosicionarPokemon(const Pokemon poke, const Coordenada coord, Conj<C
 
 }
 
-Juego::pokemonACapturar Juego::nuevoPokemonACapturar(const Pokemon poke, Conj<Coordenada>::const_Iterador itCoord,ColaPrior<Juego::TuplaNatJug> jugACapturarlo){
+Juego::pokemonACapturar Juego::nuevoPokemonACapturar(const Pokemon& poke, Conj<Coordenada>::const_Iterador itCoord,ColaPrior<Juego::TuplaNatJug> jugACapturarlo){
     Juego::pokemonACapturar res;
     res.pokemon=poke;
     res.movAfuera=0;
@@ -523,7 +523,7 @@ Juego::pokemonACapturar Juego::nuevoPokemonACapturar(const Pokemon poke, Conj<Co
 }
 
 
-void Juego::capturarPokemon(const Jugador jug, const Pokemon poke)
+void Juego::capturarPokemon(const Jugador& jug, const Pokemon& poke)
 {
     Juego::jugadorStruct jugador = juego.jugadores[jug];
     Nat cantPoke = Juego::pokemonesSalvajes.Obtener(poke);
@@ -551,7 +551,7 @@ void Juego::capturarPokemon(const Jugador jug, const Pokemon poke)
 }
 
 //  Constructor de pokemonACapturar
-Juego::pokemonACapturar::pokemonACapturar(const Pokemon poke, Conj<Coordenada>::const_Iterador itCoord, ColaPrior<TuplaNatJug> &jugACapturarlo)
+Juego::pokemonACapturar::pokemonACapturar(const Pokemon& poke, Conj<Coordenada>::const_Iterador itCoord, ColaPrior<TuplaNatJug> &jugACapturarlo)
 {
     Juego::pokemonACapturar res;
     res.pokemon = poke;

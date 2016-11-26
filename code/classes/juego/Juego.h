@@ -16,44 +16,44 @@ public:
     ~Juego();
 
     // Generadores
-    void AgregarPokemon(const Pokemon poke, const Coordenada coord);
-    const Nat AgregarJugador();
-    void Conectarse(const Jugador jug, Coordenada coord);
-    void Desconectarse(const Jugador jug);
-    void Moverse(const Jugador jug, const Coordenada coord);
+    void AgregarPokemon(const Pokemon& poke, const Coordenada& coord);
+    Nat AgregarJugador();
+    void Conectarse(const Jugador& jug, Coordenada coord);
+    void Desconectarse(const Jugador& jug);
+    void Moverse(const Jugador& jug, const Coordenada& coord);
 
     // Observadores básicos
-    const Mapa Mapa() const;
-    const Conj<Jugador>::const_Iterador Jugadores() const;
-    const bool EstaConectado(const Jugador jug) const;
-    const Nat Sanciones(const Jugador jug) const;
-    const Coordenada Posicion(const Jugador jug) const;
-    const Lista< TuplaPokeNat>::Iterador Pokemons(const Jugador jug) const;
-    const Conj<Jugador> Expulsados() const;
-    const Conj<Coordenada> PosConPokemons() const;
-    const Pokemon PokemonEnPos(const Coordenada coord) const;
-    const Nat CantMovimientosParaCaptura(const Coordenada coord) const;
+    Mapa Mapa() const;
+    Conj<Jugador>::const_Iterador Jugadores() const;
+    bool EstaConectado(const Jugador& jug) const;
+    Nat Sanciones(const Jugador& jug) const;
+    Coordenada Posicion(const Jugador& jug) const;
+    Lista< TuplaPokeNat>::Iterador Pokemons(const Jugador& jug) const;
+    Conj<Jugador> Expulsados() const;
+    Conj<Coordenada> PosConPokemons() const;
+    Pokemon PokemonEnPos(const Coordenada& coord) const;
+    Nat CantMovimientosParaCaptura(const Coordenada& coord) const;
 
     // Otras operaciones
-    const Jugador ProxID() const;
-    const Conj<Jugador> JugadoresConectados() const;
-    const Conj<Jugador> SoloLosConectados(const Conj<Jugador> jugadores) const;
-    const bool PuedoAgregarPokemon(const Coordenada coord) const;
-    const Conj<bool> HayPokemonEnTerritorio(const Coordenada coord, const Conj<Coordenada> conjCoord) const;
-    const bool DebeSancionarse(const Jugador jug, const Coordenada coord) const;
-    const bool DebeExpulsarse(const Jugador jug, const Coordenada coord) const;
-    const Coordenada HayPokemonCercano(const Coordenada coord) const;
-    const Coordenada PosPokemonCercano(const Coordenada coord) const;
-    const Conj<Jugador> EntrenadoresPosibles(const Coordenada coord, const Conj<Jugador> jugadores) const;
-    const Conj<Coordenada> PosDePokemonsACapturar(const Coordenada coord, const Conj<Coordenada> conjCoord) const;
-    const bool SeCapturo(const Coordenada coord1, const Coordenada coord2) const;
-    const Nat IndiceDeRareza(const Pokemon poke) const;
-    const Nat CantPokemonsTotales() const;
-    const Lista<Pokemon> TodosLosPokemons() const;
-    const Lista<Pokemon> PokemonsSalvajes(const Conj<Coordenada> conjCoord) const;
-    const Lista<Pokemon> PokemonsCapturados(const Conj<Jugador> jugadores) const;
-    const Conj<Coordenada> BuscarPokemonsCercanos(const Coordenada coord, const Conj<Coordenada> conjCoord) const;
-    const Nat CantMismaEspecie(const Pokemon poke, const Conj<Pokemon> pokemones) const;
+    Jugador ProxID() const;
+    Conj<Jugador> JugadoresConectados() const;
+    Conj<Jugador> SoloLosConectados(const Conj<Jugador>& jugadores) const;
+    bool PuedoAgregarPokemon(const Coordenada& coord) const;
+    Conj<bool> HayPokemonEnTerritorio(const Coordenada& coord, const Conj<Coordenada>& conjCoord) const;
+    bool DebeSancionarse(const Jugador& jug, const Coordenada& coord) const;
+    bool DebeExpulsarse(const Jugador& jug, const Coordenada& coord) const;
+    Coordenada HayPokemonCercano(const Coordenada& coord) const;
+    Coordenada PosPokemonCercano(const Coordenada& coord) const;
+    Conj<Jugador> EntrenadoresPosibles(const Coordenada& coord, const Conj<Jugador>& jugadores) const;
+    Conj<Coordenada> PosDePokemonsACapturar(const Coordenada& coord, const Conj<Coordenada>& conjCoord) const;
+    bool SeCapturo(const Coordenada& coord1, const Coordenada& coord2) const;
+    Nat IndiceDeRareza(const Pokemon& poke) const;
+    Nat CantPokemonsTotales() const;
+    Lista<Pokemon> TodosLosPokemons() const;
+    Lista<Pokemon> PokemonsSalvajes(const Conj<Coordenada>& conjCoord) const;
+    Lista<Pokemon> PokemonsCapturados(const Conj<Jugador>& jugadores) const;
+    Conj<Coordenada> BuscarPokemonsCercanos(const Coordenada& coord, const Conj<Coordenada>& conjCoord) const;
+    Nat CantMismaEspecie(const Pokemon poke, const Conj<Pokemon>& pokemones) const;
 
     /*friend ostream& operator<<(ostream& os) {
         return os;
@@ -75,7 +75,7 @@ private:
 
     struct pokemonACapturar
     {
-        pokemonACapturar(const Pokemon poke, Conj<Coordenada>::const_Iterador itCoord, ColaPrior< TuplaNatJug > &jugACapturarlo);
+        pokemonACapturar(const Pokemon& poke, Conj<Coordenada>::const_Iterador itCoord, ColaPrior< TuplaNatJug > &jugACapturarlo);
 
         Pokemon pokemon;
         Nat movAfuera;
@@ -85,7 +85,7 @@ private:
     struct TuplaNatJug
     {
         TuplaNatJug(const Nat& p, const Jugador& s) : cant_(p), jug_(s) {}
-        TuplaNatJug(const TuplaNatJug otra) { cant_ = otra.cant_, jug_ = otra.jug_; }
+        TuplaNatJug(const TuplaNatJug& otra) { cant_ = otra.cant_, jug_ = otra.jug_; }
         const Nat& cant() const { return cant_; }
         const Jugador& jug() const { return jug_; }
         bool operator<(const TuplaNatJug& otra) const { return cant_ < otra.cant_ || jug_ < otra.jug_; }
@@ -96,7 +96,7 @@ private:
     struct TuplaPokeNat
     {
         TuplaPokeNat(const Pokemon& p, const Nat& s) : poke_(p), cant_(s) {}
-        TuplaPokeNat(const TuplaPokeNat otra) { poke_ = otra.poke_, cant_ = otra.cant_; }
+        TuplaPokeNat(const TuplaPokeNat& otra) { poke_ = otra.poke_, cant_ = otra.cant_; }
         const Pokemon& poke() const { return poke_; }
         const Nat& cant() const { return cant_; }
         bool operator==(const TuplaPokeNat& otra) const { return poke_ == otra.poke_ && cant_ == otra.cant_; }
@@ -128,9 +128,9 @@ private:
     Nat cantPokemonsTotales;
 
     // Funciones auxiliares
-    Arreglo< Arreglo<posStruct> > CrearPosiciones(const Mapa map);
-    void PosicionarPokemon(const Pokemon poke, const Coordenada coord, Conj<Coordenada>::const_Iterador itCoord);
-    void capturarPokemon(const Jugador jug, const Pokemon poke);
-    pokemonACapturar nuevoPokemonACapturar (const Pokemon poke, Conj<Coordenada>::const_Iterador itCoord,ColaPrior<Juego::TuplaNatJug> jugACapturarlo);
+    Arreglo< Arreglo<posStruct> > CrearPosiciones(const Mapa& map);
+    void PosicionarPokemon(const Pokemon& poke, const Coordenada& coord, Conj<Coordenada>::const_Iterador itCoord);
+    void capturarPokemon(const Jugador& jug, const Pokemon& poke);
+    pokemonACapturar nuevoPokemonACapturar (const Pokemon& poke, Conj<Coordenada>::const_Iterador itCoord, ColaPrior<Juego::TuplaNatJug> jugACapturarlo);
     
 };
