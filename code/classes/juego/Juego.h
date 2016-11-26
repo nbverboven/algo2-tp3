@@ -1,12 +1,16 @@
 #include "../aed2/aed2.h"
-
+#include "../cola_de_prioridad/ColaPrior.h"
+#include "../coordenada/Coordenada.h"
+#include "../diccionario_string/DiccString.h"
+#include "../Grilla/grilla.h"
+#include "../mapa/Mapa.h"
 using namespace aed2;
 using namespace std;
 
 class Juego
 {
 
-  public:
+public:
     // Constructor y destructor
     Juego(); //CrearJuego
     ~Juego();
@@ -29,7 +33,7 @@ class Juego
     const Conj<Coordenada> PosConPokemons() const;
     const Pokemon PokemonEnPos(const Coordenada coord) const;
     const Nat CantMovimientosParaCaptura(const Coordenada coord) const;
- 
+
     // Otras operaciones
     const Jugador ProxID() const;
     const Conj<Jugador> JugadoresConectados() const;
@@ -55,7 +59,7 @@ class Juego
         return os;
     }*/
 
-  private:
+private:
 
     /*struct pokemonCapturado
     {
@@ -64,7 +68,7 @@ class Juego
     };*/
 
     struct posStruct
-    {       
+    {
         ColaPrior< TuplaNatJug > jugadores;
         pokemonACapturar* pokemonACapturar;
     };
@@ -111,7 +115,7 @@ class Juego
         Nat pokemonesTotales;
         Conj<Jugador>::Iterador itJugNoExpulsados;
         ColaPrior< TuplaNatJug >::ItColaPrior itPosJug;
-        ColaPrior< TuplaNatJug>::ItColaPrior itCapturarPoke;
+        ColaPrior< TuplaNatJug >::ItColaPrior itCapturarPoke;
     };
 
     Mapa mapa;
@@ -127,6 +131,6 @@ class Juego
     Arreglo< Arreglo<posStruct> > CrearPosiciones(const Mapa map);
     void PosicionarPokemon(const Pokemon poke, const Coordenada coord, Conj<Coordenada>::const_Iterador itCoord);
     void capturarPokemon(const Jugador jug, const Pokemon poke);
+    pokemonACapturar nuevoPokemonACapturar (const Pokemon poke, Conj<Coordenada>::const_Iterador itCoord,ColaPrior<Juego::TuplaNatJug> jugACapturarlo);
     
 };
-
