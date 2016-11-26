@@ -44,30 +44,30 @@ void Driver::moverse(const Jugador & j, const Coordenada & c)
 
 Conj< Coordenada > Driver::mapa() const
 {
-	return driver_juego_. Juego::mapa().Coordenadas();
+	return driver_juego_.mapa().Coordenadas();
 }
 
 
 bool Driver::hayCamino(const Coordenada & c1, const Coordenada & c2) const
 {
-	return driver_juego_. Juego::mapa().HayCamino(c1, c2);
+	return driver_juego_.mapa().HayCamino(c1, c2);
 }
 
 
 bool Driver::posExistente(const Coordenada & c) const
 {
-	return driver_juego_. Juego::mapa().PosExistente(c);
+	return driver_juego_.mapa().PosicionExistente(c);
 }
 
 
 Conj< Jugador > Driver::jugadores() const
 {
-	Conj<Jugador> res();
+	Conj<Jugador> res;
 	Conj<Jugador>::const_Iterador it = driver_juego_.Jugadores();
 
 	while ( it.HaySiguiente() )
 	{
-		res.AgregarRapido(it.siguiente());
+		res.AgregarRapido(it.Siguiente());
 		it.Avanzar();
 	}
 
@@ -95,8 +95,19 @@ Coordenada Driver::posicion(const Jugador & j) const
 
 Dicc< Pokemon , Nat > Driver::pokemons(const Jugador & j) const
 {
-	Dicc<Pokemon, Nat> res();
-	
+	Dicc<Pokemon,Nat> res;
+	Lista< typename Juego::Tupla< Pokemon , Nat > >::Iterador it = driver_juego_.Pokemons(j);
+
+	while ( it.HaySiguiente() )
+	{
+		Pokemon siguiente_pokemon = it.Siguiente().primero();
+		Nat cantidad = it.Siguiente().segundo();
+
+		res.Definir(siguiente_pokemon, cantidad);
+		it.Avanzar();
+	}
+
+	return res;
 }
 
 
@@ -108,7 +119,7 @@ Conj< Jugador > Driver::expulsados() const
 
 Conj< Coordenada > Driver::posConPokemons() const
 {
-	return driver_juego_.PosConPokemon();
+	return driver_juego_.PosConPokemons();
 }
 
 
@@ -144,7 +155,7 @@ Coordenada Driver::posPokemonCercano(const Coordenada & c) const
 
 Conj<Jugador> Driver::entrenadoresPosibles(const Coordenada & c) const
 {
-	return driver_juego_.EntrenadoresPosibles(c);
+	return driver_juego_.EntrenadoresPosibles(c, driver_juego_.JugadoresConectados());
 }
 
 
@@ -160,7 +171,7 @@ Nat Driver::cantPokemonsTotales() const
 }
 
 
-Nat Driver::cantMismaEspecie(const Pokemon & p) const
+Nat Driver::cantMismaEspecie(const Pokemon& p) const
 {
 	return driver_juego_.CantMismaEspecie(p);
 }
