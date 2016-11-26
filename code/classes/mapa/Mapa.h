@@ -109,18 +109,20 @@ void Mapa::AgregarCoordenada(Coordenada coord)
     {
         grillaStruct tupla;
         tupla.disponible=false;
-        grl.AgregarFilas(coord.Latitud()+1-grl.CantFilas(),tupla);
+        grl.AgregarFilas(coord.Latitud()+1-grl.CantFilas(), tupla);
         maxLatitud = coord.Latitud();
     }
-    if ( coord.Longitud() >=grl.CantColumnas() )
+
+    if ( coord.Longitud() >= grl.CantColumnas() )
     {
         grillaStruct tupla;
         tupla.disponible=false;
         Grilla<Nat> grilla;
         tupla.caminos = grilla;
-        grl.AgregarColumnas(coord.Longitud()+1-grl.CantColumnas(),tupla);
+        grl.AgregarColumnas(coord.Longitud()+1-grl.CantColumnas(), tupla);
         maxLongitud = coord.Longitud();
     }
+    
     if ( grl(coord.Latitud(),coord.Longitud()).caminos.EsVacio() )
     {
         coordenadas.AgregarRapido(coord);
@@ -129,7 +131,7 @@ void Mapa::AgregarCoordenada(Coordenada coord)
 
         while ( it.HaySiguiente() )
         {
-            Mapa::GrillaHayCamino(Coordenada(it.Siguiente().Latitud(),it.Siguiente().Longitud()));
+            GrillaHayCamino(Coordenada(it.Siguiente().Latitud(),it.Siguiente().Longitud()));
             it.Avanzar();
         }
     }
@@ -139,13 +141,15 @@ void Mapa::AgregarCoordenada(Coordenada coord)
 
 bool Mapa::PosicionExistente(const Coordenada& c) const
 {
-    return c.Latitud()<grl.CantFilas() && c.Longitud() < grl.CantColumnas() &&   !(grl(c.Latitud(),c.Longitud()).caminos.EsVacio());
+    return c.Latitud() < grl.CantFilas() && 
+           c.Longitud() < grl.CantColumnas() && 
+           !(grl(c.Latitud(),c.Longitud()).caminos.EsVacio());
 }
 
 
 bool Mapa::HayCamino(const Coordenada& c1, const Coordenada& c2) const
 {
-    return grl(c1.Latitud(),c1.Longitud()).caminos(c2.Latitud(),c2.Longitud())==1;
+    return grl(c1.Latitud(),c1.Longitud()).caminos(c2.Latitud(),c2.Longitud()) == 1;
 }
 
 
@@ -167,16 +171,20 @@ void Mapa::GrillaHayCamino(const Coordenada& c)
 
     while ( it.HaySiguiente() )
     {
-        Nat difFilas= grl.CantFilas()- grl(it.Siguiente().Latitud(),it.Siguiente().Longitud()).caminos.CantFilas();
-        grl(it.Siguiente().Latitud(),it.Siguiente().Longitud()).caminos.AgregarFilas(difFilas,0);
-        Nat difColumnas = grl.CantColumnas()- grl(it.Siguiente().Latitud(),it.Siguiente().Longitud()).caminos.CantColumnas();
-        grl(it.Siguiente().Latitud(),it.Siguiente().Longitud()).caminos.AgregarColumnas(difColumnas,0);
+        Nat siguiente_latitud = it.Siguiente().Latitud();
+        Nat siguiente_longitud = it.Siguiente().Longitud();
 
-        if( grl(c.Latitud(),c.Longitud()).caminos(it.Siguiente().Latitud(),it.Siguiente().Longitud()) == 0 )
+        Nat difFilas= grl.CantFilas() - grl(siguiente_latitud, siguiente_longitud).caminos.CantFilas();
+        grl(siguiente_latitud, siguiente_longitud).caminos.AgregarFilas(difFilas, 0);
+
+        Nat difColumnas = grl.CantColumnas() - grl(siguiente_latitud, siguiente_longitud).caminos.CantColumnas();
+        grl(siguiente_latitud, siguiente_longitud).caminos.AgregarColumnas(difColumnas, 0);
+
+        if( grl(c.Latitud(), c.Longitud()).caminos(siguiente_latitud, siguiente_longitud) == 0 )
         {
-            if( ExisteCamino(c,it.Siguiente(),coordenadas) )
+            if( ExisteCamino(c, it.Siguiente(), coordenadas) )
             {
-                grl(c.Latitud(),c.Longitud()).caminos(it.Siguiente().Latitud(),it.Siguiente().Longitud()) = 1;
+                grl(c.Latitud(),c.Longitud()).caminos(siguiente_latitud, siguiente_longitud) = 1;
             }
         }
 
@@ -196,9 +204,9 @@ bool Mapa::ExisteCamino(const Coordenada& c1, const Coordenada& c2, const Conj<C
 
 bool Mapa::ExisteCaminoAux(const Coordenada& c1, const Coordenada& c2)
 {
-    grl(c1.Latitud(),c1.Longitud()).disponible=false;
+    grl(c1.Latitud(), c1.Longitud()).disponible = false;
 
-    if ( c1==c2 )
+    if ( c1 == c2 )
     {
         return true;
     }
