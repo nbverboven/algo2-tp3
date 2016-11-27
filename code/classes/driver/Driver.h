@@ -7,7 +7,7 @@
 // #include "aed2/TiposBasicos.h"
 #include "../aed2/aed2/TiposBasicos.h"
 #include "../juego/Juego.h"
-#include "../juego/Juego.cpp"
+// #include "../juego/Juego.cpp"
 // #include "TiposJuego.h"
 
 using namespace aed2;

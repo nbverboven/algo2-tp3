@@ -4,7 +4,16 @@
 
 Driver::Driver(const Conj< Coordenada > & cs)
 {
-	assert(false);
+	Mapa m;
+	Conj<Coordenada> c = cs;
+	Conj<Coordenada>::const_Iterador it = c.CrearIt();
+
+	while ( it.HaySiguiente() )
+	{
+		m.AgregarCoordenada(it.Siguiente());
+	}
+
+	driver_juego_ = Juego(m);
 }
 
 
@@ -96,7 +105,7 @@ Coordenada Driver::posicion(const Jugador & j) const
 Dicc< Pokemon , Nat > Driver::pokemons(const Jugador & j) const
 {
 	Dicc<Pokemon,Nat> res;
-	Lista< typename Juego::Tupla< Pokemon , Nat > >::Iterador it = driver_juego_.Pokemons(j);
+	Lista< typename Juego::Tupla<Pokemon,Nat> >::const_Iterador it = driver_juego_.Pokemons(j);
 
 	while ( it.HaySiguiente() )
 	{
