@@ -138,7 +138,7 @@ class Juego
 
     struct posStruct
     {
-        posStruct();
+         posStruct() : pS_jugadores_(ColaPrior<Tupla<Nat,Jugador> >()), pS_pokemonACapturar_(NULL){}
 
         ~posStruct()
         {
