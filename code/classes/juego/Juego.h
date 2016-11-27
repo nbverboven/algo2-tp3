@@ -3,8 +3,11 @@
 
 #include "../aed2/aed2.h"
 #include "../cola_de_prioridad/ColaPrior.h"
+#include "../cola_de_prioridad/ColaPrior.cpp"
 #include "../coordenada/Coordenada.h"
+// #include "../coordenada/Coordenada.cpp"
 #include "../diccionario_string/DiccString.h"
+#include "../diccionario_string/DiccString.cpp"
 #include "../Grilla/grilla.h"
 #include "../mapa/Mapa.h"
 
@@ -22,7 +25,8 @@ class Juego
     class Tupla;
 
     // Constructor y destructor
-    Juego(); //CrearJuego
+    Juego();
+    Juego(const Mapa& map); //CrearJuego
     ~Juego();
 
     // Generadores
@@ -38,7 +42,8 @@ class Juego
     bool EstaConectado(const Jugador& jug) const;
     Nat Sanciones(const Jugador& jug) const;
     Coordenada Posicion(const Jugador& jug) const;
-    Lista< Tupla<Pokemon,Nat> >::Iterador Pokemons(const Jugador& jug) const;
+    Lista< Tupla<Pokemon,Nat> >::Iterador Pokemons(const Jugador& jug);
+    Lista< Tupla<Pokemon,Nat> >::const_Iterador Pokemons(const Jugador& jug) const;
     Conj<Jugador> Expulsados() const;
     Conj<Coordenada> PosConPokemons() const;
     Pokemon PokemonEnPos(const Coordenada& coord) const;
@@ -84,8 +89,20 @@ class Juego
         const P& primero() const;
         const S& segundo() const;
 
-        bool operator<(const Tupla& otra) const ;
-        bool operator==(const Tupla& otra) const;
+        bool operator<(const Tupla& otra) const
+        {
+            return tupla_prm_ < otra.tupla_prm_ || tupla_sgd_ < otra.tupla_sgd_;
+        }
+
+        bool operator>(const Tupla& otra) const
+        {
+            return tupla_prm_ > otra.tupla_prm_ || tupla_sgd_ > otra.tupla_sgd_;
+        }
+
+        bool operator==(const Tupla& otra) const
+        {
+            return tupla_prm_ == otra.tupla_prm_ && tupla_sgd_ == otra.tupla_sgd_;
+        }
 
       private:
 
@@ -106,18 +123,30 @@ class Juego
 
     struct pokemonACapturar
     {
-        pokemonACapturar(const Pokemon& poke, Conj<Coordenada>::const_Iterador itCoord, ColaPrior< Tupla<Nat,Jugador> > &jugACapturarlo);
+        // Constructor de pokemonACapturar
+        pokemonACapturar(const Pokemon& poke, Conj<Coordenada>::Iterador itCoord, 
+                         const ColaPrior< Tupla<Nat,Jugador> >& jugACapturarlo)
+            : pAC_pokemon_(poke), pAC_movAfuera_(0),
+              pAC_itCoord_(itCoord), pAC_jugACapturarlo_(jugACapturarlo)
+        {}
 
-        Pokemon pokemon_;
-        Nat movAfuera_;
-        Conj<Coordenada>::Iterador itCoord_;
-        ColaPrior< Tupla<Nat,Jugador> > jugACapturarlo_;
+        Pokemon pAC_pokemon_;
+        Nat pAC_movAfuera_;
+        Conj<Coordenada>::Iterador pAC_itCoord_;
+        ColaPrior< Tupla<Nat,Jugador> > pAC_jugACapturarlo_;
     };
 
     struct posStruct
     {
-        ColaPrior< Tupla<Nat,Jugador> > jugadores_;
-        pokemonACapturar* pokemonACapturar_;
+        posStruct();
+
+        ~posStruct()
+        {
+            delete pS_pokemonACapturar_;
+        }
+
+        ColaPrior< Tupla<Nat,Jugador> > pS_jugadores_;
+        pokemonACapturar* pS_pokemonACapturar_;
     };
 
     // struct TuplaNatJug
@@ -145,33 +174,39 @@ class Juego
 
     struct jugadorStruct
     {
-        jugadorStruct(Conj<Jugador>::Iterador itNoExpulsados);
+        // Constructor de jugadorStruct
+        jugadorStruct(Conj<Jugador>::Iterador itNoExpulsados)
+            : jS_conectado_(false), jS_sanciones_(0), jS_pokemonesTotales_(0),
+              jS_pos_(Coordenada(0,0)), jS_pokemones_(), jS_itJugNoExpulsados_(itNoExpulsados),
+              jS_itPosJug_(), jS_itCapturarPoke_()
+        {}
 
-        bool conectado;
-        Nat sanciones;
-        Coordenada pos;
-        Lista< Tupla<Pokemon,Nat> > pokemones;
-        DiccString< Lista< Tupla<Pokemon,Nat> >::Iterador > itPokemones;
-        Nat pokemonesTotales;
-        Conj<Jugador>::Iterador itJugNoExpulsados;
-        ColaPrior< Tupla< Nat,Jugador> >::ItColaPrior itPosJug;
-        ColaPrior< Tupla< Nat,Jugador> >::ItColaPrior itCapturarPoke;
+        bool jS_conectado_;
+        Nat jS_sanciones_;
+        Nat jS_pokemonesTotales_;
+        Coordenada jS_pos_;
+        Lista< Tupla<Pokemon,Nat> > jS_pokemones_;
+        DiccString< Lista< Tupla<Pokemon,Nat> >::Iterador > jS_itPokemones_;
+        Conj<Jugador>::Iterador jS_itJugNoExpulsados_;
+        ColaPrior< Tupla< Nat,Jugador> >::ItColaPrior jS_itPosJug_;
+        ColaPrior< Tupla< Nat,Jugador> >::ItColaPrior jS_itCapturarPoke_;
     };
 
-    Mapa mapa_;
-    Conj<Jugador> jugNoExpulsados_;
-    Vector<jugadorStruct> jugadores_;
-    Conj<Coordenada> posConPokemones_;
-    DiccString<Nat> pokemonesSalvajes_;
-    DiccString<Nat> pokemonesCapturados_;
-    Arreglo< Arreglo<posStruct> > posiciones_;
-    Nat cantPokemonsTotales_;
+    Mapa JG_mapa_;
+    Conj<Jugador> JG_jugNoExpulsados_;
+    Vector<jugadorStruct> JG_jugadores_;
+    Conj<Coordenada> JG_posConPokemones_;
+    DiccString<Nat> JG_pokemonesSalvajes_;
+    DiccString<Nat> JG_pokemonesCapturados_;
+    Arreglo< Arreglo<posStruct> > JG_posiciones_;
+    Nat JG_cantPokemonsTotales_;
 
     // Funciones auxiliares
-    Arreglo< Arreglo<posStruct> > CrearPosiciones(const Mapa& map);
-    void PosicionarPokemon(const Pokemon& poke, const Coordenada& coord, Conj<Coordenada>::const_Iterador itCoord);
+    Arreglo< Arreglo< posStruct > > CrearPosiciones(const Mapa& map);
+    void PosicionarPokemon(const Pokemon& poke, const Coordenada& coord, Conj<Coordenada>::Iterador itCoord);
     void capturarPokemon(const Jugador& jug, const Pokemon& poke);
-    pokemonACapturar nuevoPokemonACapturar (const Pokemon& poke, Conj<Coordenada>::const_Iterador itCoord, ColaPrior< Juego::Tupla<Nat,Jugador> > jugACapturarlo);
+    // pokemonACapturar* nuevoPokemonACapturar(const Pokemon& poke, Conj<Coordenada>::const_Iterador itCoord, 
+    //                                         const ColaPrior< Tupla<Nat,Jugador> >& jugACapturarlo);
     
 }; /* class Juego */
 
