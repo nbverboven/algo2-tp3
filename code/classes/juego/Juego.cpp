@@ -654,16 +654,23 @@ Nat Juego::CantMismaEspecie(const Pokemon& poke) const
 
 Arreglo< Arreglo< typename Juego::posStruct > > Juego::CrearPosiciones(const Mapa& map)
 {
+Arreglo< Arreglo< typename Juego::posStruct > > Juego::CrearPosiciones(const Mapa& map)
+{
     Nat ancho = JG_mapa_.MaxLatitud();
     Nat largo = JG_mapa_.MaxLongitud();
     Arreglo<Arreglo<posStruct> > posiciones(largo);
     Nat lg = 0;
     while (lg<largo){
         Arreglo<posStruct> arrAncho(ancho);
+        Nat an = 0;
+        while (an<ancho){
+            Juego::posStruct nueva;
+            arrAncho[an]=nueva;
+            an ++;
+        }
         JG_posiciones_[lg] = arrAncho;
         lg ++;
     }
-
     return posiciones;
 }
 
