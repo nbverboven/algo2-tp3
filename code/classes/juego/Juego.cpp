@@ -52,7 +52,7 @@ Juego::Juego()
 Juego::Juego(const Mapa& map) 
     : JG_mapa_(map), JG_jugNoExpulsados_(), JG_jugadores_(), 
       JG_posConPokemones_(), JG_pokemonesSalvajes_(),
-      JG_pokemonesCapturados_(), JG_posiciones_(), 
+      JG_pokemonesCapturados_(), JG_posiciones_(CrearPosiciones(map)), 
       JG_cantPokemonsTotales_(0)
 {}
 
@@ -654,25 +654,24 @@ Nat Juego::CantMismaEspecie(const Pokemon& poke) const
 
 Arreglo< Arreglo< typename Juego::posStruct > > Juego::CrearPosiciones(const Mapa& map)
 {
-Arreglo< Arreglo< typename Juego::posStruct > > Juego::CrearPosiciones(const Mapa& map)
-{
-    Nat ancho = JG_mapa_.MaxLatitud();
-    Nat largo = JG_mapa_.MaxLongitud();
+    Nat ancho = map.MaxLongitud();
+    Nat largo = map.MaxLatitud();
     Arreglo<Arreglo<posStruct> > posiciones(largo);
-    Nat lg = 0;
+    Nat an = 0;
+    Arreglo<posStruct> arrAncho(ancho);
+    while (an<ancho){
+        typename Juego::posStruct nueva;
+        arrAncho.Definir(an,nueva);
+        an ++;
+    }
+    Nat lg=0;
     while (lg<largo){
-        Arreglo<posStruct> arrAncho(ancho);
-        Nat an = 0;
-        while (an<ancho){
-            Juego::posStruct nueva;
-            arrAncho[an]=nueva;
-            an ++;
-        }
-        JG_posiciones_[lg] = arrAncho;
-        lg ++;
+        posiciones.Definir(lg,arrAncho);
+        lg++;
     }
     return posiciones;
 }
+
 
 void Juego::PosicionarPokemon(const Pokemon& poke, const Coordenada& coord, Conj<Coordenada>::Iterador itCoord)
 {
