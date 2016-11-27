@@ -49,6 +49,8 @@ namespace aed2
     {
     public:
 
+      ItColaPrior();
+
       bool haySiguiente() const;
       const T& siguiente() const;
       void eliminarSiguiente();

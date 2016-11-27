@@ -71,6 +71,11 @@ typename ColaPrior<T>::ItColaPrior ColaPrior<T>::crearIt()
  ***************************/
 
 template <class T>
+ColaPrior<T>::ItColaPrior::ItColaPrior()
+{}
+
+
+template <class T>
 ColaPrior<T>::ItColaPrior::ItColaPrior(typename ColaPrior<T>::Nodo* primero, ColaPrior<T>* cola)
 	: itCP_siguiente_(primero), itCP_colaP_(cola)
 {}
