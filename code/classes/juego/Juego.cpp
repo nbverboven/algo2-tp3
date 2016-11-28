@@ -1,5 +1,6 @@
 #include "Juego.h"
 
+
 /*
  * Para simplificar la escritura y poder identificar a quién correspondían los
  * atributos, se utilizaron los siguientes prefijos:
@@ -287,7 +288,7 @@ const Pokemon Juego::PokemonEnPos(const Coordenada& coord)
 
 Nat Juego::CantMovimientosParaCaptura(const Coordenada& coord) const
 {
-    return JG_posiciones_[coord.Longitud()][coord.Latitud()].pS_pokemonACapturar_->pAC_movAfuera_;
+    return JG_posiciones_[coord.Latitud()][coord.Longitud()].pS_pokemonACapturar_->pAC_movAfuera_;
 }
 
 
@@ -490,18 +491,12 @@ Conj<Coordenada> Juego::PosDePokemonsACapturar(const Coordenada& coord, const Co
 bool Juego::SeCapturo(const Coordenada& coord1, const Coordenada& coord2) const
 {
     bool res = false;
-    typename Juego::posStruct info_posicion = JG_posiciones_[coord1.Latitud()][coord1.Longitud()];
     if (HayPokemonCercano(coord2)){
-        if (PosPokemonCercano(coord2) != coord1 && info_posicion.pS_pokemonACapturar_ != NULL){
-            res = true;
-        }
-        else{
-            if (info_posicion.pS_pokemonACapturar_ != NULL){
-                res = true;
-            }
-        }
+        res = PosPokemonCercano(coord2) != coord1 && CantMovimientosParaCaptura(coord1)>=9 && !(EntrenadoresPosibles(coord1,JugadoresConectados()).EsVacio());
     }
-
+    else{
+        res = CantMovimientosParaCaptura(coord1)>=9 && !(EntrenadoresPosibles(coord1,JugadoresConectados()).EsVacio());
+    }
     return res;
 }
 
@@ -668,7 +663,7 @@ void Juego::PosicionarPokemon(const Pokemon& poke, const Coordenada& coord, Conj
         latDesde = lat-2;
     }
 
-    while ( latDesde <= lat+2 && latDesde < JG_mapa_.MaxLatitud() )
+    while ( latDesde <= lat+2 && latDesde <= JG_mapa_.MaxLatitud() )
     {
         Nat lonDesde = 0;
 
@@ -677,9 +672,9 @@ void Juego::PosicionarPokemon(const Pokemon& poke, const Coordenada& coord, Conj
             lonDesde = lon-2;
         }
 
-        while ( lonDesde <= lon+2 && lonDesde < JG_mapa_.MaxLongitud() )
+        while ( lonDesde <= lon+2 && lonDesde <= JG_mapa_.MaxLongitud() )
         {
-            if ( Coordenada::distEuclidea(Coordenada(latDesde,lonDesde), coord) )
+            if ( Coordenada::distEuclidea(Coordenada(latDesde,lonDesde), coord)<=4 )
             {
                 typename Juego::posStruct subTupla = JG_posiciones_[lonDesde][latDesde];
                 ColaPrior< typename Juego::Tupla<Nat,Jugador> >::ItColaPrior itJugadores = subTupla.pS_jugadores_.crearIt();
@@ -749,7 +744,6 @@ void Juego::capturarPokemon(const Jugador& jug, const Pokemon& poke)
     jugador.jS_pokemonesTotales_ += 1;
     JG_jugadores_[jug] = jugador;
 }
-
 
 
 
