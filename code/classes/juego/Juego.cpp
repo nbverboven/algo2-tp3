@@ -101,10 +101,10 @@ void Juego::Conectarse(const Jugador& jug, Coordenada coord)
     JG_jugadores_[jug].jS_conectado_ = true;
     JG_jugadores_[jug].jS_pos_ = coord;
 
-    typename Juego::posStruct datos_de_la_posicion = JG_posiciones_[coord.Latitud()][coord.Longitud()];
+    typename Juego::posStruct* datos_de_la_posicion = &(JG_posiciones_[coord.Latitud()][coord.Longitud()]);
     typename Juego::Tupla<Nat,Jugador> tupla(JG_jugadores_[jug].jS_pokemonesTotales_, jug);
 
-    JG_jugadores_[jug].jS_itPosJug_ = datos_de_la_posicion.pS_jugadores_.encolar(tupla);
+    JG_jugadores_[jug].jS_itPosJug_ = datos_de_la_posicion->pS_jugadores_.encolar(tupla);
 
     if ( HayPokemonCercano(coord) )
     {
