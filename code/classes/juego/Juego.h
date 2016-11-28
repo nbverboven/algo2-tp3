@@ -30,7 +30,7 @@ class Juego
     ~Juego();
 
     // Generadores
-    void AgregarPokemon(const Pokemon& poke, const Coordenada& coord);
+    void AgregarPokemon(const Pokemon &poke, const Coordenada& coord);
     Jugador AgregarJugador();
     void Conectarse(const Jugador& jug, Coordenada coord);
     void Desconectarse(const Jugador& jug);
@@ -46,7 +46,7 @@ class Juego
     Lista< Tupla<Pokemon,Nat> >::const_Iterador Pokemons(const Jugador& jug) const;
     Conj<Jugador> Expulsados() const;
     Conj<Coordenada> PosConPokemons() const;
-    Pokemon PokemonEnPos(const Coordenada& coord) const;
+    const Pokemon PokemonEnPos(const Coordenada& coord);
     Nat CantMovimientosParaCaptura(const Coordenada& coord) const;
 
     // Otras operaciones
@@ -124,13 +124,13 @@ class Juego
     struct pokemonACapturar
     {
         // Constructor de pokemonACapturar
-        pokemonACapturar(const Pokemon& poke, Conj<Coordenada>::Iterador itCoord, 
+        pokemonACapturar(const Pokemon poke, Conj<Coordenada>::Iterador itCoord,
                          const ColaPrior< Tupla<Nat,Jugador> >& jugACapturarlo)
             : pAC_pokemon_(poke), pAC_movAfuera_(0),
               pAC_itCoord_(itCoord), pAC_jugACapturarlo_(jugACapturarlo)
         {}
 
-        Pokemon pAC_pokemon_;
+        const Pokemon pAC_pokemon_;
         Nat pAC_movAfuera_;
         Conj<Coordenada>::Iterador pAC_itCoord_;
         ColaPrior< Tupla<Nat,Jugador> > pAC_jugACapturarlo_;
@@ -138,39 +138,19 @@ class Juego
 
     struct posStruct
     {
-         posStruct() :  pS_pokemonACapturar_(NULL){}
+        posStruct() : pS_pokemonACapturar_(NULL){}
 
         ~posStruct()
         {
-            delete pS_pokemonACapturar_;
+            //delete pS_pokemonACapturar_;
         }
 
         ColaPrior< Tupla<Nat,Jugador> > pS_jugadores_;
         pokemonACapturar* pS_pokemonACapturar_;
+
     };
 
-    // struct TuplaNatJug
-    // {
-    //     TuplaNatJug(const Nat& p, const Jugador& s) : cant_(p), jug_(s) {}
-    //     TuplaNatJug(const TuplaNatJug& otra) { cant_ = otra.cant_, jug_ = otra.jug_; }
-    //     const Nat& cant() const { return cant_; }
-    //     const Jugador& jug() const { return jug_; }
-    //     bool operator<(const TuplaNatJug& otra) const { return cant_ < otra.cant_ || jug_ < otra.jug_; }
-    //     bool operator==(const TuplaNatJug& otra) const { return cant_ == otra.cant_ && jug_ == otra.jug_; }
-    //     Nat cant_;
-    //     Jugador jug_;
-    // };
 
-    // struct TuplaPokeNat
-    // {
-    //     TuplaPokeNat(const Pokemon& p, const Nat& s) : poke_(p), cant_(s) {}
-    //     TuplaPokeNat(const TuplaPokeNat& otra) { poke_ = otra.poke_, cant_ = otra.cant_; }
-    //     const Pokemon& poke() const { return poke_; }
-    //     const Nat& cant() const { return cant_; }
-    //     bool operator==(const TuplaPokeNat& otra) const { return poke_ == otra.poke_ && cant_ == otra.cant_; }
-    //     Pokemon poke_;
-    //     Nat cant_;
-    // };
 
     struct jugadorStruct
     {
