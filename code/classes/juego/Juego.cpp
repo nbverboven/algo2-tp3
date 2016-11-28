@@ -101,7 +101,7 @@ void Juego::Conectarse(const Jugador& jug, Coordenada coord)
     JG_jugadores_[jug].jS_conectado_ = true;
     JG_jugadores_[jug].jS_pos_ = coord;
 
-    typename Juego::posStruct datos_de_la_posicion = JG_posiciones_[coord.Latitud()][coord.Latitud()];
+    typename Juego::posStruct datos_de_la_posicion = JG_posiciones_[coord.Latitud()][coord.Longitud()];
     typename Juego::Tupla<Nat,Jugador> tupla(JG_jugadores_[jug].jS_pokemonesTotales_, jug);
 
     JG_jugadores_[jug].jS_itPosJug_ = datos_de_la_posicion.pS_jugadores_.encolar(tupla);
@@ -109,7 +109,7 @@ void Juego::Conectarse(const Jugador& jug, Coordenada coord)
     if ( HayPokemonCercano(coord) )
     {
         Coordenada coordPoke = PosPokemonCercano(coord);
-        typename Juego::pokemonACapturar* pokeACapturar = JG_posiciones_[coordPoke.Latitud()][coordPoke.Latitud()].pS_pokemonACapturar_;
+        typename Juego::pokemonACapturar* pokeACapturar = JG_posiciones_[coordPoke.Latitud()][coordPoke.Longitud()].pS_pokemonACapturar_;
         JG_jugadores_[jug].jS_itCapturarPoke_ = pokeACapturar->pAC_jugACapturarlo_.encolar(tupla);
     }
 }
