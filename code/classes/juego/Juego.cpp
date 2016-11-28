@@ -394,9 +394,9 @@ bool Juego::HayPokemonCercano(const Coordenada& coord) const
         {
             if ( Coordenada::distEuclidea(Coordenada(latDesde,lonDesde),coord) <= 4 )
             {
-                typename Juego::posStruct info_posicion = JG_posiciones_[latDesde][lonDesde];
+                // typename Juego::posStruct info_posicion = JG_posiciones_[latDesde][lonDesde];
 
-                if ( info_posicion.pS_pokemonACapturar_ != NULL )
+                if ( JG_posiciones_[latDesde][lonDesde].pS_pokemonACapturar_ != NULL )
                 {
                     res =true;
                 }
@@ -439,9 +439,9 @@ Coordenada Juego::PosPokemonCercano(const Coordenada& coord) const
 
             if ( Coordenada::distEuclidea(retCoor,coord) <= 4 )
             {
-                typename Juego::posStruct info_posicion = JG_posiciones_[latDesde][lonDesde];
+                // typename Juego::posStruct info_posicion = JG_posiciones_[latDesde][lonDesde];
 
-                if ( info_posicion.pS_pokemonACapturar_ != NULL )
+                if ( JG_posiciones_[latDesde][lonDesde].pS_pokemonACapturar_ != NULL )
                 {
                     return retCoor;
                 }
