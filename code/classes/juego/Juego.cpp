@@ -40,25 +40,20 @@ const S& Juego::Tupla<P,S>::segundo() const
     return tupla_sgd_;
 }
 
-
-
-
-
-
 // Constructor
 Juego::Juego()
 {}
 
-Juego::Juego(const Mapa& map) 
-    : JG_mapa_(map), JG_jugNoExpulsados_(), JG_jugadores_(), 
+Juego::Juego(const Mapa& map)
+    : JG_mapa_(map), JG_jugNoExpulsados_(), JG_jugadores_(),
       JG_posConPokemones_(), JG_pokemonesSalvajes_(),
-      JG_pokemonesCapturados_(), JG_posiciones_(CrearPosiciones(map)), 
+      JG_pokemonesCapturados_(), JG_posiciones_(CrearPosiciones(map)),
       JG_cantPokemonsTotales_(0)
 {}
 
 
 // Destructor
-Juego::~Juego() 
+Juego::~Juego()
 {}
 
 
@@ -69,8 +64,9 @@ Juego::~Juego()
 *********                        GENERADORES                            *********
 *********************************************************************************/
 
-void Juego::AgregarPokemon(const Pokemon& poke, const Coordenada& coord)
+void Juego::AgregarPokemon(const Pokemon &poke, const Coordenada& coord)
 {
+    assert(PuedoAgregarPokemon(coord));
     Nat nuevaCantPokemonTotal = JG_cantPokemonsTotales_ + 1;
     JG_cantPokemonsTotales_ = nuevaCantPokemonTotal;
     Conj<Coordenada>::Iterador itConjPoke = JG_posConPokemones_.AgregarRapido(coord);
@@ -132,79 +128,79 @@ void Juego::Desconectarse(const Jugador& jug)
 
 void Juego::Moverse(const Jugador& jug, const Coordenada& coord)
 {
+    assert(Juego::JG_jugNoExpulsados_.Pertenece(jug));
+    assert(Juego::EstaConectado(jug));
+    assert(Juego::mapa().PosicionExistente(coord));
     typename Juego::jugadorStruct jugador = JG_jugadores_[jug];
     Coordenada posAnterior = jugador.jS_pos_;
 
     if ( !(JG_mapa_.HayCamino(coord,posAnterior)) || Coordenada::distEuclidea(coord, posAnterior) >= 100 )
     {
         jugador.jS_sanciones_ += 1;
-    }
+        if (jugador.jS_sanciones_=5)    {
+            jugador.jS_itJugNoExpulsados_.EliminarSiguiente();
+            Lista< typename Juego::Tupla<Pokemon,Nat> >::Iterador pokemones = jugador.jS_pokemones_.CrearIt();
 
-    jugador.jS_itPosJug_.eliminarSiguiente();
-
-    if ( HayPokemonCercano(posAnterior) && !(HayPokemonCercano(coord)) )
-    {
-        jugador.jS_itCapturarPoke_.eliminarSiguiente();
-    }
-
-    if ( jugador.jS_sanciones_ < 5 )
-    {
-        // typename Juego::posStruct pStruct = JG_posiciones_[coord.Latitud()][coord.Longitud()];
-        typename Juego::Tupla<Nat,Jugador> tupla(jugador.jS_pokemonesTotales_, jug);
-
-        jugador.jS_pos_ = coord;
-        jugador.jS_itPosJug_ = JG_posiciones_[coord.Latitud()][coord.Longitud()].pS_jugadores_.encolar(tupla);
-
-        if ( HayPokemonCercano(coord) && !(HayPokemonCercano(posAnterior)) )
-        {
-            Coordenada coorPoke = PosPokemonCercano(coord);
-            typename Juego::pokemonACapturar* pokeACapturar = JG_posiciones_[coorPoke.Latitud()][coorPoke.Longitud()].pS_pokemonACapturar_;
-            jugador.jS_itCapturarPoke_ = pokeACapturar->pAC_jugACapturarlo_.encolar(tupla);
-            pokeACapturar->pAC_movAfuera_ = 0;
-        }
-
-        Conj<Coordenada>::Iterador itPosConPoke = JG_posConPokemones_.CrearIt();
-
-        while ( itPosConPoke.HaySiguiente() )
-        {
-            Coordenada posConPoke = itPosConPoke.Siguiente();
-            Nat lat = posConPoke.Latitud();
-            Nat lon = posConPoke.Longitud();
-            typename Juego::pokemonACapturar* pokeACapturar = JG_posiciones_[lat][lon].pS_pokemonACapturar_;
-
-            if ( Coordenada::distEuclidea(posConPoke,coord) > 4 )
+            while (pokemones.HaySiguiente())
             {
-                pokeACapturar->pAC_movAfuera_ += 1;
+                Pokemon poke = pokemones.Siguiente().primero();
+                Nat cantPoke = pokemones.Siguiente().segundo();
+                Nat nuevaCantPokemonTotal = JG_cantPokemonsTotales_ - cantPoke;
+                JG_cantPokemonsTotales_ = nuevaCantPokemonTotal;
+                Nat nuevaCantPoke = JG_pokemonesCapturados_.Obtener(poke) - cantPoke;
+                JG_pokemonesCapturados_.Definir(poke, nuevaCantPoke);
+            }
+        }
+        else {
+            jugador.jS_itPosJug_.eliminarSiguiente();
+
+            if ( HayPokemonCercano(posAnterior) && !(HayPokemonCercano(coord)) )
+            {
+                jugador.jS_itCapturarPoke_.eliminarSiguiente();
+            }
+            // typename Juego::posStruct pStruct = JG_posiciones_[coord.Latitud()][coord.Longitud()];
+            typename Juego::Tupla<Nat,Jugador> tupla(jugador.jS_pokemonesTotales_, jug);
+
+            jugador.jS_pos_ = coord;
+            jugador.jS_itPosJug_ = JG_posiciones_[coord.Latitud()][coord.Longitud()].pS_jugadores_.encolar(tupla);
+
+            if ( HayPokemonCercano(coord) && !(HayPokemonCercano(posAnterior)) )
+            {
+                Coordenada coorPoke = PosPokemonCercano(coord);
+                typename Juego::pokemonACapturar* pokeACapturar = JG_posiciones_[coorPoke.Latitud()][coorPoke.Longitud()].pS_pokemonACapturar_;
+                jugador.jS_itCapturarPoke_ = pokeACapturar->pAC_jugACapturarlo_.encolar(tupla);
+                pokeACapturar->pAC_movAfuera_ = 0;
             }
 
-            if ( pokeACapturar->pAC_movAfuera_ == 10 )
-            {
-                typename Juego::Tupla<Nat,Jugador> jugACapt = pokeACapturar->pAC_jugACapturarlo_.proximo();
+            Conj<Coordenada>::Iterador itPosConPoke = JG_posConPokemones_.CrearIt();
 
-                capturarPokemon(jugACapt.segundo(), pokeACapturar->pAC_pokemon_);
-                pokeACapturar->pAC_itCoord_.EliminarSiguiente();
-                JG_posiciones_[lat][lon].pS_pokemonACapturar_ = NULL;
+            while ( itPosConPoke.HaySiguiente() )
+            {
+                Coordenada posConPoke = itPosConPoke.Siguiente();
+                Nat lat = posConPoke.Latitud();
+                Nat lon = posConPoke.Longitud();
+                typename Juego::pokemonACapturar* pokeACapturar = JG_posiciones_[lat][lon].pS_pokemonACapturar_;
+
+                if ( Coordenada::distEuclidea(posConPoke,coord) > 4 )
+                {
+                    pokeACapturar->pAC_movAfuera_ += 1;
+                }
+
+                if ( pokeACapturar->pAC_movAfuera_ == 10 )
+                {
+                    typename Juego::Tupla<Nat,Jugador> jugACapt = pokeACapturar->pAC_jugACapturarlo_.proximo();
+
+                    capturarPokemon(jugACapt.segundo(), pokeACapturar->pAC_pokemon_);
+                    pokeACapturar->pAC_itCoord_.EliminarSiguiente();
+                    JG_posiciones_[lat][lon].pS_pokemonACapturar_ = NULL;
+                }
+
+                itPosConPoke.Avanzar();
             }
 
-            itPosConPoke.Avanzar();
         }
-    }
-    else
-    {
-        jugador.jS_itJugNoExpulsados_.EliminarSiguiente();
-        Lista< typename Juego::Tupla<Pokemon,Nat> >::Iterador pokemones = jugador.jS_pokemones_.CrearIt();
 
-        while (pokemones.HaySiguiente()) 
-        {
-            Pokemon poke = pokemones.Siguiente().primero();
-            Nat cantPoke = pokemones.Siguiente().segundo();
-            Nat nuevaCantPokemonTotal = JG_cantPokemonsTotales_ - cantPoke;
-            JG_cantPokemonsTotales_ = nuevaCantPokemonTotal;
-            Nat nuevaCantPoke = JG_pokemonesCapturados_.Obtener(poke) - cantPoke;
-            JG_pokemonesCapturados_.Definir(poke, nuevaCantPoke);
-        }
     }
-
     JG_jugadores_[jug] = jugador;
 }
 
@@ -283,7 +279,7 @@ Conj<Coordenada> Juego::PosConPokemons() const
 }
 
 
-Pokemon Juego::PokemonEnPos(const Coordenada& coord) const
+const Pokemon Juego::PokemonEnPos(const Coordenada& coord)
 {
     return JG_posiciones_[coord.Longitud()][coord.Latitud()].pS_pokemonACapturar_->pAC_pokemon_;
 }
@@ -303,18 +299,8 @@ Nat Juego::CantMovimientosParaCaptura(const Coordenada& coord) const
 
 Jugador Juego::ProxID() const
 {
-    Jugador res;
 
-    if ( JG_jugadores_.Longitud() == 0 )
-    {
-        res = 0;
-    }
-    else
-    {
-        res = JG_jugadores_.Longitud() + 1;
-    }
-
-    return res;
+    return JG_jugadores_.Longitud();
 }
 
 
@@ -350,7 +336,7 @@ Conj<Jugador> Juego::SoloLosConectados(const Conj<Jugador>& jugadores) const
 
 bool Juego::PuedoAgregarPokemon(const Coordenada& coord) const
 {
-    return !(HayPokemonCercano(coord));
+    return !(HayPokemonCercano(coord)) && JG_mapa_.PosicionExistente(coord);
 }
 
 
@@ -395,7 +381,6 @@ bool Juego::HayPokemonCercano(const Coordenada& coord) const
     {
         latDesde = lat - 2;
     }
-
     while ( latDesde <= lat+2 && latDesde < JG_mapa_.MaxLatitud() )
     {
         Nat lonDesde = 0;
@@ -404,12 +389,11 @@ bool Juego::HayPokemonCercano(const Coordenada& coord) const
         {
             lonDesde = lon - 2;
         }
-
-        while ( lonDesde <= lat+2 && lonDesde < JG_mapa_.MaxLongitud() )
+        while ( lonDesde <= lon+2 && lonDesde < JG_mapa_.MaxLongitud() )
         {
             if ( Coordenada::distEuclidea(Coordenada(latDesde,lonDesde),coord) <= 4 )
             {
-                typename Juego::posStruct info_posicion = JG_posiciones_[coord.Latitud()][coord.Longitud()];
+                typename Juego::posStruct info_posicion = JG_posiciones_[latDesde][lonDesde];
 
                 if ( info_posicion.pS_pokemonACapturar_ != NULL )
                 {
@@ -418,7 +402,7 @@ bool Juego::HayPokemonCercano(const Coordenada& coord) const
             }
 
             lonDesde ++;
-        } 
+        }
 
         latDesde ++;
     }
@@ -429,6 +413,7 @@ bool Juego::HayPokemonCercano(const Coordenada& coord) const
 
 Coordenada Juego::PosPokemonCercano(const Coordenada& coord) const
 {
+    assert(HayPokemonCercano(coord));
     Nat lat = coord.Latitud();
     Nat lon = coord.Longitud();
     Nat latDesde=0;
@@ -453,7 +438,7 @@ Coordenada Juego::PosPokemonCercano(const Coordenada& coord) const
 
             if ( Coordenada::distEuclidea(retCoor,coord) <= 4 )
             {
-                typename Juego::posStruct info_posicion = JG_posiciones_[coord.Latitud()][coord.Longitud()];
+                typename Juego::posStruct info_posicion = JG_posiciones_[latDesde][lonDesde];
 
                 if ( info_posicion.pS_pokemonACapturar_ != NULL )
                 {
@@ -537,7 +522,7 @@ Nat Juego::CantPokemonsTotales() const
 
 Lista<Pokemon> Juego::TodosLosPokemons() const
 {
-    Lista<Pokemon> res;
+    Lista<Pokemon> res = Juego::PokemonsSalvajes(PosConPokemons());
     Lista<Pokemon>::const_Iterador it = PokemonsCapturados(JG_jugNoExpulsados_).CrearIt();
 
     while ( it.HaySiguiente() )
@@ -651,7 +636,6 @@ Nat Juego::CantMismaEspecie(const Pokemon& poke) const
 /********************************************************************************
 *********                    FUNCIONES AUXILIARES                       *********
 *********************************************************************************/
-
 Arreglo< Arreglo< typename Juego::posStruct > > Juego::CrearPosiciones(const Mapa& map)
 {
     Nat ancho = map.MaxLongitud();
@@ -672,7 +656,6 @@ Arreglo< Arreglo< typename Juego::posStruct > > Juego::CrearPosiciones(const Map
     return posiciones;
 }
 
-
 void Juego::PosicionarPokemon(const Pokemon& poke, const Coordenada& coord, Conj<Coordenada>::Iterador itCoord)
 {
     typename Juego::posStruct tupla = JG_posiciones_[coord.Latitud()][coord.Longitud()];
@@ -680,7 +663,6 @@ void Juego::PosicionarPokemon(const Pokemon& poke, const Coordenada& coord, Conj
     Nat lat = coord.Latitud();
     Nat lon = coord.Longitud();
     Nat latDesde = 0;
-
     if ( lat-2 > 0 )
     {
         latDesde = lat-2;
@@ -695,7 +677,7 @@ void Juego::PosicionarPokemon(const Pokemon& poke, const Coordenada& coord, Conj
             lonDesde = lon-2;
         }
 
-        while ( lonDesde <= lat+2 && lonDesde < JG_mapa_.MaxLongitud() )
+        while ( lonDesde <= lon+2 && lonDesde < JG_mapa_.MaxLongitud() )
         {
             if ( Coordenada::distEuclidea(Coordenada(latDesde,lonDesde), coord) )
             {
@@ -767,5 +749,7 @@ void Juego::capturarPokemon(const Jugador& jug, const Pokemon& poke)
     jugador.jS_pokemonesTotales_ += 1;
     JG_jugadores_[jug] = jugador;
 }
+
+
 
 
