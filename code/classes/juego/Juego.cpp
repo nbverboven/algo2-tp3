@@ -633,8 +633,8 @@ Nat Juego::CantMismaEspecie(const Pokemon& poke) const
 *********************************************************************************/
 Arreglo< Arreglo< typename Juego::posStruct > > Juego::CrearPosiciones(const Mapa& map)
 {
-    Nat ancho = map.MaxLongitud();
-    Nat largo = map.MaxLatitud();
+    Nat ancho = map.MaxLongitud()+1;
+    Nat largo = map.MaxLatitud()+1;
     Arreglo<Arreglo<posStruct> > posiciones(largo);
     Nat an = 0;
     Arreglo<posStruct> arrAncho(ancho);
