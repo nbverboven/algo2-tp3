@@ -726,7 +726,7 @@ void Juego::capturarPokemon(const Jugador& jug, const Pokemon& poke)
     Nat cantPoke = JG_pokemonesSalvajes_.Obtener(poke);
     JG_pokemonesSalvajes_.Definir(poke, cantPoke-1);
 
-    if ( JG_pokemonesSalvajes_.Definido(poke) )
+    if ( JG_pokemonesCapturados_.Definido(poke) )
     {
         Nat cantPoke = JG_pokemonesCapturados_.Obtener(poke);
         JG_pokemonesCapturados_.Definir(poke, cantPoke+1);
