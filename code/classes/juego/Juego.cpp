@@ -395,7 +395,7 @@ bool Juego::HayPokemonCercano(const Coordenada& coord) const
     {
         latDesde = lat - 2;
     }
-    while ( latDesde <= lat+2 && latDesde < JG_mapa_.MaxLatitud() )
+    while ( latDesde <= lat+2 && latDesde <= JG_mapa_.MaxLatitud() )
     {
         Nat lonDesde = 0;
 
@@ -403,7 +403,7 @@ bool Juego::HayPokemonCercano(const Coordenada& coord) const
         {
             lonDesde = lon - 2;
         }
-        while ( lonDesde <= lon+2 && lonDesde < JG_mapa_.MaxLongitud() )
+        while ( lonDesde <= lon+2 && lonDesde <= JG_mapa_.MaxLongitud() )
         {
             if ( Coordenada::distEuclidea(Coordenada(latDesde,lonDesde),coord) <= 4 )
             {
