@@ -543,8 +543,7 @@ Lista<Pokemon> Juego::PokemonsSalvajes(const Conj<Coordenada>& conjCoord) const
 
         if (JG_posConPokemones_.Pertenece(coordPoke))
         {
-            typename Juego::posStruct info_posicion = JG_posiciones_[coordPoke.Latitud()][coordPoke.Longitud()];
-            Pokemon poke = info_posicion.pS_pokemonACapturar_->pAC_pokemon_;
+            Pokemon poke = JG_posiciones_[coordPoke.Latitud()][coordPoke.Longitud()].pS_pokemonACapturar_->pAC_pokemon_;
             res.AgregarAtras(poke);
         }
 
