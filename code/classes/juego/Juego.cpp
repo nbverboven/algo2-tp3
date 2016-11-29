@@ -188,7 +188,7 @@ void Juego::Moverse(const Jugador& jug, const Coordenada& coord)
                 pokeACapturar->pAC_movAfuera_ += 1;
             }
 
-            if ( pokeACapturar->pAC_movAfuera_ == 10 )
+            if ( pokeACapturar->pAC_movAfuera_ == 10 && !(pokeACapturar->pAC_jugACapturarlo_.esVacia()) )
             {
                 typename Juego::Tupla<Nat,Jugador> jugACapt = pokeACapturar->pAC_jugACapturarlo_.proximo();
 
