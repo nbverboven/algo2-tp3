@@ -446,7 +446,7 @@ Coordenada Juego::PosPokemonCercano(const Coordenada& coord) const
             lonDesde= lon-2;
         }
 
-        while ( lonDesde<lat+2 && lonDesde<= JG_mapa_.MaxLongitud() )
+        while ( lonDesde<=lon+2 && lonDesde<= JG_mapa_.MaxLongitud() )
         {
             Coordenada retCoor(latDesde,lonDesde);
 
@@ -688,7 +688,7 @@ void Juego::PosicionarPokemon(const Pokemon& poke, const Coordenada& coord, Conj
         {
             if ( Coordenada::distEuclidea(Coordenada(latDesde,lonDesde), coord)<=4 )
             {
-                typename Juego::posStruct subTupla = JG_posiciones_[lonDesde][latDesde];
+                typename Juego::posStruct subTupla = JG_posiciones_[latDesde][lonDesde];
                 ColaPrior< typename Juego::Tupla<Nat,Jugador> >::ItColaPrior itJugadores = subTupla.pS_jugadores_.crearIt();
 
                 while ( itJugadores.haySiguiente() )
