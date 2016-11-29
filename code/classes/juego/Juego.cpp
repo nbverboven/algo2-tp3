@@ -437,7 +437,7 @@ Coordenada Juego::PosPokemonCercano(const Coordenada& coord) const
         latDesde = lat - 2;
     }
 
-    while (latDesde <= lat+2 && latDesde < JG_mapa_.MaxLatitud())
+    while (latDesde <= lat+2 && latDesde <= JG_mapa_.MaxLatitud())
     {
         Nat lonDesde=0;
 
@@ -446,7 +446,7 @@ Coordenada Juego::PosPokemonCercano(const Coordenada& coord) const
             lonDesde= lon-2;
         }
 
-        while ( lonDesde<lat+2 && lonDesde<JG_mapa_.MaxLongitud() )
+        while ( lonDesde<lat+2 && lonDesde<= JG_mapa_.MaxLongitud() )
         {
             Coordenada retCoor(latDesde,lonDesde);
 
