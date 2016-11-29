@@ -391,7 +391,7 @@ bool Juego::HayPokemonCercano(const Coordenada& coord) const
     Nat lon = coord.Longitud();
     Nat latDesde = 0;
 
-    if ( lat-2 > 0 )
+    if ( lat>2 )
     {
         latDesde = lat - 2;
     }
@@ -399,7 +399,7 @@ bool Juego::HayPokemonCercano(const Coordenada& coord) const
     {
         Nat lonDesde = 0;
 
-        if (lon-2 > 0)
+        if (lon>2)
         {
             lonDesde = lon - 2;
         }
@@ -432,7 +432,7 @@ Coordenada Juego::PosPokemonCercano(const Coordenada& coord) const
     Nat lon = coord.Longitud();
     Nat latDesde=0;
 
-    if ( lat-2 >= 0 )
+    if ( lat > 2 )
     {
         latDesde = lat - 2;
     }
@@ -441,7 +441,7 @@ Coordenada Juego::PosPokemonCercano(const Coordenada& coord) const
     {
         Nat lonDesde=0;
 
-        if ( lon-2 > 0 )
+        if ( lon > 2 )
         {
             lonDesde= lon-2;
         }
@@ -670,7 +670,7 @@ void Juego::PosicionarPokemon(const Pokemon& poke, const Coordenada& coord, Conj
     Nat lat = coord.Latitud();
     Nat lon = coord.Longitud();
     Nat latDesde = 0;
-    if ( lat-2 > 0 )
+    if ( lat > 2 )
     {
         latDesde = lat-2;
     }
@@ -679,7 +679,7 @@ void Juego::PosicionarPokemon(const Pokemon& poke, const Coordenada& coord, Conj
     {
         Nat lonDesde = 0;
 
-        if ( lon-2 > 0 )
+        if ( lon > 2 )
         {
             lonDesde = lon-2;
         }
