@@ -46,7 +46,7 @@ class Juego
     Lista< Tupla<Pokemon,Nat> >::const_Iterador Pokemons(const Jugador& jug) const;
     Conj<Jugador> Expulsados() const;
     Conj<Coordenada> PosConPokemons() const;
-    const Pokemon PokemonEnPos(const Coordenada& coord);
+    Pokemon PokemonEnPos(const Coordenada& coord);
     Nat CantMovimientosParaCaptura(const Coordenada& coord) const;
 
     // Otras operaciones
