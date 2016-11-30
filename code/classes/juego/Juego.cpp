@@ -69,6 +69,7 @@ Juego::~Juego()
 void Juego::AgregarPokemon(const Pokemon &poke, const Coordenada& coord)
 {
     assert(PuedoAgregarPokemon(coord));
+
     Nat nuevaCantPokemonTotal = JG_cantPokemonsTotales_ + 1;
     JG_cantPokemonsTotales_ = nuevaCantPokemonTotal;
     Conj<Coordenada>::Iterador itConjPoke = JG_posConPokemones_.AgregarRapido(coord);
@@ -132,9 +133,9 @@ void Juego::Desconectarse(const Jugador& jug)
 
 void Juego::Moverse(const Jugador& jug, const Coordenada& coord)
 {
-    assert(Juego::JG_jugNoExpulsados_.Pertenece(jug));
-    assert(Juego::EstaConectado(jug));
-    assert(Juego::mapa().PosicionExistente(coord));
+    assert(JG_jugNoExpulsados_.Pertenece(jug));
+    assert(EstaConectado(jug));
+    assert(JG_mapa_.PosicionExistente(coord));
 
     typename Juego::jugadorStruct* jugador = &JG_jugadores_[jug];
     Coordenada posAnterior = jugador->jS_pos_;
@@ -203,14 +204,16 @@ void Juego::Moverse(const Jugador& jug, const Coordenada& coord)
 
                 capturarPokemon(jugACapt.segundo(), pokeACap->pAC_pokemon_);
 
-                pokeACap->pAC_itCoord_.EliminarSiguiente();
+                // pokeACap->pAC_itCoord_.EliminarSiguiente();
+                
+                itPosConPoke.EliminarSiguiente();
                 JG_posiciones_[lat][lon].pS_pokemonACapturar_ = NULL;
-             }
-
-            itPosConPoke.Avanzar();
             }
 
+            itPosConPoke.Avanzar();
         }
+
+    }
 
     // JG_jugadores_[jug] = jugador;
 }
@@ -706,17 +709,7 @@ void Juego::PosicionarPokemon(const Pokemon& poke, const Coordenada& coord, Conj
     }
 
     tupla->pS_pokemonACapturar_ = new pokemonACapturar(poke, itCoord, jugACapturarlo);
-//    JG_posiciones_[coord.Latitud()][coord.Longitud()] = tupla;
 }
-
-
-// typename Juego::pokemonACapturar Juego::nuevoPokemonACapturar(const Pokemon& poke, Conj<Coordenada>::const_Iterador itCoord,
-//                                                                const ColaPrior< typename Juego::Tupla<Nat,Jugador> >& jugACapturarlo)
-// {
-//     typename Juego::pokemonACapturar* nuevo = new pokemonACapturar(poke, itCoord, jugACapturarlo);
-
-//     return nuevo;
-// }
 
 
 void Juego::capturarPokemon(const Jugador& jug, const Pokemon& poke)
