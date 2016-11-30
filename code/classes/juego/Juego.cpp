@@ -662,9 +662,10 @@ Arreglo< Arreglo< typename Juego::posStruct > > Juego::CrearPosiciones(const Map
     return posiciones;
 }
 
+
 void Juego::PosicionarPokemon(const Pokemon& poke, const Coordenada& coord, Conj<Coordenada>::Iterador itCoord)
 {
-    typename Juego::posStruct tupla = JG_posiciones_[coord.Latitud()][coord.Longitud()];
+    typename Juego::posStruct* tupla = &JG_posiciones_[coord.Latitud()][coord.Longitud()];
     ColaPrior< typename Juego::Tupla<Nat,Jugador> > jugACapturarlo;
     Nat lat = coord.Latitud();
     Nat lon = coord.Longitud();
@@ -678,8 +679,7 @@ void Juego::PosicionarPokemon(const Pokemon& poke, const Coordenada& coord, Conj
     {
         Nat lonDesde = 0;
 
-        if ( lon > 2 )
-        {
+        if ( lon > 2 )        {
             lonDesde = lon-2;
         }
 
@@ -705,8 +705,8 @@ void Juego::PosicionarPokemon(const Pokemon& poke, const Coordenada& coord, Conj
         latDesde ++;
     }
 
-    tupla.pS_pokemonACapturar_ = new pokemonACapturar(poke, itCoord, jugACapturarlo);
-    JG_posiciones_[coord.Latitud()][coord.Longitud()] = tupla;
+    tupla->pS_pokemonACapturar_ = new pokemonACapturar(poke, itCoord, jugACapturarlo);
+//    JG_posiciones_[coord.Latitud()][coord.Longitud()] = tupla;
 }
 
 
