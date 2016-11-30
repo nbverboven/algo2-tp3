@@ -1,6 +1,7 @@
 #include "Juego.h"
 
 
+
 /*
  * Para simplificar la escritura y poder identificar a quién correspondían los
  * atributos, se utilizaron los siguientes prefijos:
@@ -134,43 +135,50 @@ void Juego::Moverse(const Jugador& jug, const Coordenada& coord)
     assert(Juego::JG_jugNoExpulsados_.Pertenece(jug));
     assert(Juego::EstaConectado(jug));
     assert(Juego::mapa().PosicionExistente(coord));
-    typename Juego::jugadorStruct jugador = JG_jugadores_[jug];
-    Coordenada posAnterior = jugador.jS_pos_;
 
-    if ( !(JG_mapa_.HayCamino(coord,posAnterior)) || Coordenada::distEuclidea(coord, posAnterior) >= 100 ){
-        jugador.jS_sanciones_ += 1;
-        if (jugador.jS_sanciones_==5)    {
-            jugador.jS_itJugNoExpulsados_.EliminarSiguiente();
-            Lista< typename Juego::Tupla<Pokemon,Nat> >::Iterador pokemones = jugador.jS_pokemones_.CrearIt();
+    typename Juego::jugadorStruct* jugador = &JG_jugadores_[jug];
+    Coordenada posAnterior = jugador->jS_pos_;
 
-            while (pokemones.HaySiguiente()) {
+    if ( !(JG_mapa_.HayCamino(coord,posAnterior)) || Coordenada::distEuclidea(coord, posAnterior) >= 100 )
+    {
+        jugador->jS_sanciones_ += 1;
+
+        if (jugador->jS_sanciones_ == 5)
+        {
+            jugador->jS_itJugNoExpulsados_.EliminarSiguiente();
+            Lista< typename Juego::Tupla<Pokemon,Nat> >::Iterador pokemones = jugador->jS_pokemones_.CrearIt();
+
+            while (pokemones.HaySiguiente()) 
+            {
                 Pokemon poke = pokemones.Siguiente().primero();
                 Nat cantPoke = pokemones.Siguiente().segundo();
                 Nat nuevaCantPokemonTotal = JG_cantPokemonsTotales_ - cantPoke;
                 JG_cantPokemonsTotales_ = nuevaCantPokemonTotal;
                 Nat nuevaCantPoke = JG_pokemonesCapturados_.Obtener(poke) - cantPoke;
                 JG_pokemonesCapturados_.Definir(poke, nuevaCantPoke);
-                }
             }
+        }
     }
-    else {
-        jugador.jS_itPosJug_.eliminarSiguiente();
-        jugador.jS_pos_=coord;
+    else 
+    {
+        jugador->jS_itPosJug_.eliminarSiguiente();
+        jugador->jS_pos_=coord;
+
         if ( HayPokemonCercano(posAnterior) && !(HayPokemonCercano(coord)) )
         {
-            jugador.jS_itCapturarPoke_.eliminarSiguiente();
+            jugador->jS_itCapturarPoke_.eliminarSiguiente();
         }
-        // typename Juego::posStruct pStruct = JG_posiciones_[coord.Latitud()][coord.Longitud()];
-        typename Juego::Tupla<Nat,Jugador> tupla(jugador.jS_pokemonesTotales_, jug);
 
-        jugador.jS_pos_ = coord;
-        jugador.jS_itPosJug_ = JG_posiciones_[coord.Latitud()][coord.Longitud()].pS_jugadores_.encolar(tupla);
+        typename Juego::Tupla<Nat,Jugador> tupla(jugador->jS_pokemonesTotales_, jug);
+
+        jugador->jS_pos_ = coord;
+        jugador->jS_itPosJug_ = JG_posiciones_[coord.Latitud()][coord.Longitud()].pS_jugadores_.encolar(tupla);
 
         if ( HayPokemonCercano(coord) && !(HayPokemonCercano(posAnterior)) )
         {
             Coordenada coorPoke = PosPokemonCercano(coord);
             typename Juego::pokemonACapturar* pokeACapturar = JG_posiciones_[coorPoke.Latitud()][coorPoke.Longitud()].pS_pokemonACapturar_;
-            jugador.jS_itCapturarPoke_ = pokeACapturar->pAC_jugACapturarlo_.encolar(tupla);
+            jugador->jS_itCapturarPoke_ = pokeACapturar->pAC_jugACapturarlo_.encolar(tupla);
             pokeACapturar->pAC_movAfuera_ = 0;
         }
 
@@ -181,40 +189,31 @@ void Juego::Moverse(const Jugador& jug, const Coordenada& coord)
             Coordenada posConPoke = itPosConPoke.Siguiente();
             Nat lat = posConPoke.Latitud();
             Nat lon = posConPoke.Longitud();
-            typename Juego::pokemonACapturar* pokeACapturar = JG_posiciones_[lat][lon].pS_pokemonACapturar_;
+            typename Juego::pokemonACapturar* pokeACap = JG_posiciones_[lat][lon].pS_pokemonACapturar_;
 
             if ( Coordenada::distEuclidea(posConPoke,coord) > 4 )
             {
-                pokeACapturar->pAC_movAfuera_ += 1;
+                pokeACap->pAC_movAfuera_ += 1;
             }
 
 
-            if ( pokeACapturar->pAC_movAfuera_ == 10 && !(pokeACapturar->pAC_jugACapturarlo_.esVacia()) )
+            if ( pokeACap->pAC_movAfuera_ == 10 && !(pokeACap->pAC_jugACapturarlo_.esVacia()) )
             {
-                typename Juego::Tupla<Nat,Jugador> jugACapt = pokeACapturar->pAC_jugACapturarlo_.proximo();
+                typename Juego::Tupla<Nat,Jugador> jugACapt = pokeACap->pAC_jugACapturarlo_.proximo();
 
-                capturarPokemon(jugACapt.segundo(), pokeACapturar->pAC_pokemon_);
-                pokeACapturar->pAC_itCoord_.EliminarSiguiente();
+                capturarPokemon(jugACapt.segundo(), pokeACap->pAC_pokemon_);
+
+                pokeACap->pAC_itCoord_.EliminarSiguiente();
                 JG_posiciones_[lat][lon].pS_pokemonACapturar_ = NULL;
-
-                if(jugador.jS_itPokemones_.Definido(pokeACapturar->pAC_pokemon_)){
-                    Nat cantAnterior = jugador.jS_itPokemones_.Obtener(pokeACapturar->pAC_pokemon_).Siguiente().segundo();
-                    Tupla<Pokemon,Nat> nuevaTupla (pokeACapturar->pAC_pokemon_,cantAnterior+1);
-                    jugador.jS_itPokemones_.Obtener(pokeACapturar->pAC_pokemon_).Siguiente() = nuevaTupla;
-                }
-                else {
-                    Tupla<Pokemon,Nat> nuevaTupla (pokeACapturar->pAC_pokemon_,1);
-                    Lista<Tupla<Pokemon,Nat> >::Iterador it(jugador.jS_pokemones_.AgregarAtras(nuevaTupla));
-                    jugador.jS_itPokemones_.Definir(pokeACapturar->pAC_pokemon_,it);
-                }
              }
 
             itPosConPoke.Avanzar();
             }
 
         }
-    JG_jugadores_[jug] = jugador;
-    }
+
+    // JG_jugadores_[jug] = jugador;
+}
 
 
 
@@ -722,7 +721,7 @@ void Juego::PosicionarPokemon(const Pokemon& poke, const Coordenada& coord, Conj
 
 void Juego::capturarPokemon(const Jugador& jug, const Pokemon& poke)
 {
-    typename Juego::jugadorStruct jugador = JG_jugadores_[jug];
+    typename Juego::jugadorStruct* jugador = &JG_jugadores_[jug];
     Nat cantPoke = JG_pokemonesSalvajes_.Obtener(poke);
     JG_pokemonesSalvajes_.Definir(poke, cantPoke-1);
 
@@ -736,26 +735,26 @@ void Juego::capturarPokemon(const Jugador& jug, const Pokemon& poke)
         JG_pokemonesCapturados_.Definir(poke, 1);
     }
 
-    if ( jugador.jS_itPokemones_.Definido(poke) )
+    if ( jugador->jS_itPokemones_.Definido(poke) )
     {
-        Lista< typename Juego::Tupla<Pokemon,Nat> >::Iterador* itPokemones = &jugador.jS_itPokemones_.Obtener(poke);
-        Nat cantPoke = itPokemones->Siguiente().segundo();
-        itPokemones->EliminarSiguiente();
+        Lista< typename Juego::Tupla<Pokemon,Nat> >::Iterador itPokemones = jugador->jS_itPokemones_.Obtener(poke);
+        Nat cantPoke = itPokemones.Siguiente().segundo();
+        itPokemones.EliminarSiguiente();
 
         typename Juego::Tupla<Pokemon,Nat> nueva_tupla(poke, cantPoke + 1);
-        itPokemones->AgregarComoSiguiente(nueva_tupla);
+        itPokemones.AgregarComoSiguiente(nueva_tupla);
+
+        jugador->jS_itPokemones_.Definir(poke, itPokemones);
     }
     else
     {
         typename Juego::Tupla<Pokemon,Nat> nueva_tupla(poke, 1);
-        Lista< typename Juego::Tupla<Pokemon,Nat> >::Iterador itPoke = jugador.jS_pokemones_.CrearItUlt();
+        Lista< typename Juego::Tupla<Pokemon,Nat> >::Iterador itPoke = jugador->jS_pokemones_.CrearItUlt();
         itPoke.AgregarComoSiguiente(nueva_tupla);
-        jugador.jS_itPokemones_.Definir(poke,itPoke);
+
+        jugador->jS_itPokemones_.Definir(poke, itPoke);
     }
 
-    jugador.jS_pokemonesTotales_ += 1;
-    JG_jugadores_[jug] = jugador;
+    jugador->jS_pokemonesTotales_ += 1;
+    // JG_jugadores_[jug] = jugador;
 }
-
-
-
