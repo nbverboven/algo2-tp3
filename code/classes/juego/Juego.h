@@ -142,7 +142,7 @@ class Juego
 
         ~posStruct()
         {
-            //delete pS_pokemonACapturar_;
+            delete pS_pokemonACapturar_;
         }
 
         ColaPrior< Tupla<Nat,Jugador> > pS_jugadores_;
