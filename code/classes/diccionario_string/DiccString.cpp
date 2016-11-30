@@ -110,6 +110,8 @@ bool DiccString<T>::Definido(const String& clave) const
 template <typename T>
 T& DiccString<T>::Obtener(const String& clave) 
 {   
+    assert(Definido(clave));
+    
     Nodo* actual = raiz_;
 
     for (unsigned i = 0; i < clave.size(); ++i)
@@ -124,6 +126,8 @@ T& DiccString<T>::Obtener(const String& clave)
 template <typename T>
 const T& DiccString<T>::Obtener(const String& clave) const 
 {
+    assert(Definido(clave));
+
     Nodo* actual = raiz_;
 
     for (unsigned i = 0; i < clave.size(); ++i)
@@ -145,6 +149,8 @@ const Conj<String>& DiccString<T>::Claves() const
 template <typename T>
 void DiccString<T>::Borrar(const String& clave) 
 {
+    assert(Definido(clave));
+
     claves_.Eliminar(clave);
 
     Nodo* actual = raiz_;
