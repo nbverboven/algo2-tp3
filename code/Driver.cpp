@@ -11,6 +11,7 @@ Driver::Driver(const Conj< Coordenada > & cs)
 	while ( it.HaySiguiente() )
 	{
 		m.AgregarCoordenada(it.Siguiente());
+		it.Avanzar();
 	}
 
 	driver_juego_ = Juego(m);
