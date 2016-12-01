@@ -207,7 +207,8 @@ void Juego::Moverse(const Jugador& jug, const Coordenada& coord)
                 // pokeACap->pAC_itCoord_.EliminarSiguiente();
                 
                 itPosConPoke.EliminarSiguiente();
-                JG_posiciones_[lat][lon].pS_pokemonACapturar_ = NULL;
+                pokeACap=NULL;
+               // JG_posiciones_[lat][lon].pS_pokemonACapturar_ = NULL;
             }
 
             itPosConPoke.Avanzar();
