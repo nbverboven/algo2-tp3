@@ -1,15 +1,10 @@
 #ifndef H_JUEGO
 #define H_JUEGO
 
-#include "../aed2/aed2.h"
-#include "../cola_de_prioridad/ColaPrior.h"
-#include "../cola_de_prioridad/ColaPrior.cpp"
-#include "../coordenada/Coordenada.h"
-// #include "../coordenada/Coordenada.cpp"
-#include "../diccionario_string/DiccString.h"
-#include "../diccionario_string/DiccString.cpp"
-#include "../Grilla/grilla.h"
-#include "../mapa/Mapa.h"
+#include "aed2/aed2.h"
+#include "ColaPrior.h"
+#include "DiccString.h"
+#include "Mapa.h"
 
 using namespace aed2;
 using namespace std;
@@ -46,7 +41,7 @@ class Juego
     Lista< Tupla<Pokemon,Nat> >::const_Iterador Pokemons(const Jugador& jug) const;
     Conj<Jugador> Expulsados() const;
     Conj<Coordenada> PosConPokemons() const;
-    Pokemon PokemonEnPos(const Coordenada& coord);
+    Pokemon PokemonEnPos(const Coordenada& coord) const;
     Nat CantMovimientosParaCaptura(const Coordenada& coord) const;
 
     // Otras operaciones

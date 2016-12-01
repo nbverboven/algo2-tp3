@@ -1,8 +1,7 @@
 #ifndef COORDENADA_H
 #define COORDENADA_H
 
-#include "../aed2/aed2.h"
-#include <cmath>
+#include "aed2/aed2.h"
 using namespace aed2;
 using namespace std;
 

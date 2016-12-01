@@ -2,12 +2,8 @@
 //	g++ -o tests tests.cpp Driver.cpp <lista de archivos *.cpp propios>
 //	valgrind --leak-check=full ./tests
 
-// #include "classes/driver/Driver.h"
 #include "Driver.h"
-#include "Driver.cpp"
-#include "../../mini_test.h"
-// #include "../coordenada/Coordenada.h"
-// #include "../coordenada/Coordenada.cpp"
+#include "mini_test.h"
 
 using namespace aed2;
 

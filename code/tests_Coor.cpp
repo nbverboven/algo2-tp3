@@ -1,7 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include "Coordenada.h"
-#include "../../mini_test.h"
+#include "mini_test.h"
 
 using namespace std;
 using namespace aed2;

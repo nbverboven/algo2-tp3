@@ -10,7 +10,7 @@
  */
 #define DEBUG
 
-#include "../../TiposJuego.h"
+#include "../TiposJuego.h"
 #include "aed2/Arreglo.h"
 #include "aed2/Lista.h"
 #include "aed2/Vector.h"

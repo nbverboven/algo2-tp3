@@ -1,7 +1,7 @@
 #include <iostream>
 #include <fstream>
-#include "grilla.h"
-#include "../../mini_test.h"
+#include "Grilla.h"
+#include "mini_test.h"
 
 using namespace std;
 using namespace aed2;

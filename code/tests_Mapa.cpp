@@ -1,7 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include "Mapa.h"
-#include "../../mini_test.h"
+#include "mini_test.h"
 
 
 void test_MapaVacio()

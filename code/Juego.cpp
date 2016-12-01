@@ -295,7 +295,7 @@ Conj<Coordenada> Juego::PosConPokemons() const
 }
 
 
-Pokemon Juego::PokemonEnPos(const Coordenada& coord)
+Pokemon Juego::PokemonEnPos(const Coordenada& coord) const
 {
     return JG_posiciones_[coord.Latitud()][coord.Longitud()].pS_pokemonACapturar_->pAC_pokemon_;
 }

@@ -2,8 +2,7 @@
 #include <fstream>
 #include <vector>
 #include "ColaPrior.h"
-#include "ColaPrior.cpp"
-#include "../../mini_test.h"
+#include "mini_test.h"
 
 using namespace std;
 using namespace aed2;
