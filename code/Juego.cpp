@@ -207,11 +207,15 @@ void Juego::Moverse(const Jugador& jug, const Coordenada& coord)
 				itPosConPoke.EliminarSiguiente();
 				pokeACap = NULL;
 
-			}
-
-			itPosConPoke.Avanzar();
+                // pokeACap->pAC_itCoord_.EliminarSiguiente();
+                
+                // itPosConPoke.EliminarSiguiente();
+                // pokeACap=NULL;
+               // JG_posiciones_[lat][lon].pS_pokemonACapturar_ = NULL;
+            }
 		}
 
+		itPosConPoke.Avanzar();
 	}
 
 	// JG_jugadores_[jug] = jugador;
