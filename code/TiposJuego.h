@@ -1,7 +1,7 @@
 #ifndef TIPOSJUEGO_H_
 #define TIPOSJUEGO_H_
 
-#include "aed2/aed2/TiposBasicos.h"
+#include "aed2/TiposBasicos.h"
 
 typedef unsigned int Jugador;
 typedef std::string Pokemon;

@@ -1,10 +1,11 @@
 #ifndef H_JUEGO
 #define H_JUEGO
 
-#include "aed2/aed2.h"
+#include "aed2.h"
 #include "ColaPrior.h"
 #include "DiccString.h"
 #include "Mapa.h"
+#include "TiposJuego.h"
 
 using namespace aed2;
 using namespace std;

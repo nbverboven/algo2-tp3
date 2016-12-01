@@ -1,7 +1,7 @@
 #ifndef DICC_STRING_H_INCLUDED
 #define DICC_STRING_H_INCLUDED
 
-#include "aed2/aed2.h"
+#include "aed2.h"
 #include <string>
 #include <iostream>
 #include <cassert>

@@ -1,7 +1,7 @@
 #ifndef H_MAPA
 #define H_MAPA
 
-#include "aed2/aed2.h"
+#include "aed2.h"
 #include "Grilla.h"
 #include "Coordenada.h"
 

@@ -1,7 +1,7 @@
 #ifndef H_GRILLA
 #define H_GRILLA
 
-#include "aed2/aed2.h"
+#include "aed2.h"
 #include <iostream>
 #include <cassert>
 
