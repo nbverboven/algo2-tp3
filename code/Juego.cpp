@@ -205,14 +205,17 @@ void Juego::Moverse(const Jugador& jug, const Coordenada& coord)
 				capturarPokemon(jugACapt.segundo(), pokeACap->pAC_pokemon_);
 
 				itPosConPoke.EliminarSiguiente();
-				pokeACap = NULL;
+				// pokeACap = NULL;
 
-                // pokeACap->pAC_itCoord_.EliminarSiguiente();
-                
-                // itPosConPoke.EliminarSiguiente();
-                // pokeACap=NULL;
-               // JG_posiciones_[lat][lon].pS_pokemonACapturar_ = NULL;
-            }
+				delete pokeACap;
+				
+				JG_posiciones_[lat][lon].pS_pokemonACapturar_ = NULL;
+
+				// pokeACap->pAC_itCoord_.EliminarSiguiente();
+				
+				// itPosConPoke.EliminarSiguiente();
+				// pokeACap=NULL;
+			}
 
 			itPosConPoke.Avanzar();
 		}
@@ -416,7 +419,7 @@ bool Juego::HayPokemonCercano(const Coordenada& coord) const
 
 				if ( JG_posiciones_[latDesde][lonDesde].pS_pokemonACapturar_ != NULL )
 				{
-					res =true;
+					res = true;
 				}
 			}
 
@@ -460,13 +463,10 @@ Coordenada Juego::PosPokemonCercano(const Coordenada& coord) const
 
 			if ( Coordenada::distEuclidea(retCoor,coord) <= 4 )
 			{
-				// typename Juego::posStruct info_posicion = JG_posiciones_[latDesde][lonDesde];
-
 				if ( JG_posiciones_[latDesde][lonDesde].pS_pokemonACapturar_ != NULL )
 				{
 					lo_encontre = true;
 					res = retCoor;
-					// return retCoor;
 				}
 			}
 
