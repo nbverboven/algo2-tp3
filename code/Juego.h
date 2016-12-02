@@ -50,7 +50,7 @@ class Juego
     Conj<Jugador> JugadoresConectados() const;
     Conj<Jugador> SoloLosConectados(const Conj<Jugador>& jugadores) const;
     bool PuedoAgregarPokemon(const Coordenada& coord) const;
-    Conj<bool> HayPokemonEnTerritorio(const Coordenada& coord, const Conj<Coordenada>& conjCoord) const;
+    bool HayPokemonEnTerritorio(const Coordenada& coord, const Conj<Coordenada>& conjCoord) const;
     bool DebeSancionarse(const Jugador& jug, const Coordenada& coord) const;
     bool DebeExpulsarse(const Jugador& jug, const Coordenada& coord) const;
     bool HayPokemonCercano(const Coordenada& coord) const;

@@ -355,26 +355,24 @@ Conj<Jugador> Juego::SoloLosConectados(const Conj<Jugador>& jugadores) const
 	return res;
 }
 
-
 bool Juego::PuedoAgregarPokemon(const Coordenada& coord) const
 {
-	return !(HayPokemonCercano(coord)) && JG_mapa_.PosicionExistente(coord);
+    return !(HayPokemonEnTerritorio(coord,JG_posConPokemones_)) && JG_mapa_.PosicionExistente(coord);
 }
 
 
-Conj<bool> Juego::HayPokemonEnTerritorio(const Coordenada& coord, const Conj<Coordenada>& conjCoord) const
+bool Juego::HayPokemonEnTerritorio(const Coordenada& coord, const Conj<Coordenada>& conjCoord) const
 {
-	Conj<bool> res;
-	Conj<Coordenada>::const_Iterador it = conjCoord.CrearIt();
-	while (it.HaySiguiente()){
-		Coordenada coordPoke = it.Siguiente();
-		res.AgregarRapido(Coordenada::distEuclidea(coord, coordPoke) <= 4);
-		it.Avanzar();
-	}
+    bool res=false;
+    Conj<Coordenada>::const_Iterador it = conjCoord.CrearIt();
+    while (it.HaySiguiente()){
+        Coordenada coordPoke = it.Siguiente();
+        res = res || Coordenada::distEuclidea(coord, coordPoke) <= 4;
+        it.Avanzar();
+    }
 
-	return res;
+    return res;
 }
-
 
 bool Juego::DebeSancionarse(const Jugador& jug, const Coordenada& coord) const
 {
