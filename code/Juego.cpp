@@ -213,9 +213,9 @@ void Juego::Moverse(const Jugador& jug, const Coordenada& coord)
                 // pokeACap=NULL;
                // JG_posiciones_[lat][lon].pS_pokemonACapturar_ = NULL;
             }
-		}
 
-		itPosConPoke.Avanzar();
+			itPosConPoke.Avanzar();
+		}
 	}
 
 	// JG_jugadores_[jug] = jugador;
