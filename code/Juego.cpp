@@ -113,6 +113,7 @@ void Juego::Conectarse(const Jugador& jug, Coordenada coord)
 		Coordenada coordPoke = PosPokemonCercano(coord);
 		typename Juego::pokemonACapturar* pokeACapturar = JG_posiciones_[coordPoke.Latitud()][coordPoke.Longitud()].pS_pokemonACapturar_;
 		JG_jugadores_[jug].jS_itCapturarPoke_ = pokeACapturar->pAC_jugACapturarlo_.encolar(tupla);
+		pokeACapturar->pAC_movAfuera_ = 0;
 	}
 }
 
