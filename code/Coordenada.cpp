@@ -94,3 +94,11 @@ Coordenada& Coordenada::operator=(const Coordenada& aCopiar)
 
     return *this;
 }
+
+
+std::ostream& operator<<(std::ostream& os, const Coordenada& c)
+{
+    os << '(' << c.Latitud() << ',' << c.Longitud() << ')';
+
+    return os;
+}

@@ -32,16 +32,12 @@ class Coordenada
     // Asignacion
     Coordenada& operator=(const Coordenada& aCopiar);
 
-    /*friend ostream& operator<<(ostream& os) {
-        return os;
-    }*/
+    friend ostream& operator<<(ostream& os, const Coordenada& c);
 
   private:
   
     Nat latitud_;
     Nat longitud_;
-
-    // Funciones auxiliares
 
 };
 
