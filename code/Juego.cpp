@@ -176,7 +176,7 @@ void Juego::Moverse(const Jugador& jug, const Coordenada& coord)
 
 			if ( HayPokemonCercano(posAnterior) )
 			{
-				jugador->jS_itCapturarPoke_.eliminarSiguiente(); // problema
+				jugador->jS_itCapturarPoke_.eliminarSiguiente();
 			}
 
 			while ( pokemones.HaySiguiente() ) 
