@@ -211,6 +211,7 @@ void ColaPrior<T>::ItColaPrior::eliminarSiguiente()
 		itCP_colaP_->CP_raiz_ = NULL;
 
 		delete tmp;
+		itCP_siguiente_ = NULL;
 
 		// Actualizo el tamaño de la cola
 		itCP_colaP_->CP_tamanio_ -= 1;
@@ -241,7 +242,8 @@ void ColaPrior<T>::ItColaPrior::eliminarSiguiente()
 			ult_padre->nodoCP_hijoI_ = NULL;
 		}
 
-		delete itCP_siguiente_;
+		// Apunto al nodo que voy a borrar
+		typename ColaPrior<T>::Nodo* a_borrar = itCP_siguiente_;
 
 		// Hago que el siguiente del iterador apunte al elemento que 
 		// rompe el invariante de minHeap
@@ -252,6 +254,9 @@ void ColaPrior<T>::ItColaPrior::eliminarSiguiente()
 
 		// Restauro el invariante
 		siftDown();
+		itCP_siguiente_ = NULL;
+
+		delete a_borrar;
 	}
 }
 
@@ -653,7 +658,7 @@ void ColaPrior<T>::ItColaPrior::agregarAlFinal(const T& elem)
 template <class T>
 void ColaPrior<T>::ItColaPrior::avanzar()
 {
-	assert(haySiguiente());
+	// assert(haySiguiente());
 
 	itCP_siguiente_ = itCP_siguiente_->nodoCP_siguiente_;
 

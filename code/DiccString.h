@@ -93,7 +93,6 @@ DiccString<T>::DiccString(const DiccString& d)
 template <typename T>
 DiccString<T>::~DiccString()
 {
-
 	while ( claves_.Cardinal() >0 )
 	{
 		Conj<String>::Iterador it = claves_.CrearIt();
@@ -175,7 +174,7 @@ bool DiccString<T>::Definido(const String& clave) const
 template <typename T>
 T& DiccString<T>::Obtener(const String& clave) 
 {   
-	assert(Definido(clave));
+	// assert(Definido(clave));
 	
 	Nodo* actual = raiz_;
 
@@ -191,7 +190,7 @@ T& DiccString<T>::Obtener(const String& clave)
 template <typename T>
 const T& DiccString<T>::Obtener(const String& clave) const 
 {
-	assert(Definido(clave));
+	// assert(Definido(clave));
 
 	Nodo* actual = raiz_;
 
@@ -214,7 +213,7 @@ const Conj<String>& DiccString<T>::Claves() const
 template <typename T>
 void DiccString<T>::Borrar(const String& clave) 
 {
-	assert(Definido(clave));
+	// assert(Definido(clave));
 
 	claves_.Eliminar(clave);
 
@@ -283,8 +282,6 @@ void DiccString<T>::borrarSubString(const Nodo* desde, Nodo* hasta, const char& 
 
 	desde->siguientes_[int(ultimo_char_borrado)] = NULL;
 }
-
-
 
 
 #endif /* DICC_STRING_H_INCLUDED */
