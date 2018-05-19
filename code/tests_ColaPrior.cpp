@@ -301,16 +301,46 @@ void test_borrar_elem_intermedio_2()
 }
 
 
+void test_modificar_elem_intermedio()
+{
+	ColaPrior<int> c1;
+
+	c1.encolar(9);
+	c1.encolar(4);
+	c1.encolar(1);
+	ColaPrior<int>::ItColaPrior it = c1.encolar(6);
+	c1.encolar(7);
+	ColaPrior<int>::ItColaPrior it2 = c1.encolar(3);
+	c1.encolar(5);
+	c1.encolar(8);
+
+	cout << '\n' << "Estado inicial: " << c1 << '\n';
+	
+	it.modificarSiguiente(0);
+	cout << "Cambio el 6 por un 10: " << c1 << '\n';
+	ASSERT_EQ(c1.proximo(), 0);
+
+	it2.modificarSiguiente(-1);
+	cout << "Cambio el 3 por un -1: " << c1 << '\n';
+	ASSERT_EQ(c1.proximo(), -1);
+
+	it2.modificarSiguiente(5);
+	cout << "Cambio el -1 por un 5: " << c1 << '\n';
+	ASSERT_EQ(c1.proximo(), 0);
+}
+
+
 int main()
 {
-    RUN_TEST(test_constructor);
-    RUN_TEST(test_encolar);
-    RUN_TEST(test_desencolar);
-    RUN_TEST(test_esVacia);
-    RUN_TEST(test_tamanio);
-    RUN_TEST(test_proximo);
-    RUN_TEST(test_borrar_elem_intermedio);
-    RUN_TEST(test_borrar_elem_intermedio_2);
+	RUN_TEST(test_constructor);
+	RUN_TEST(test_encolar);
+	RUN_TEST(test_desencolar);
+	RUN_TEST(test_esVacia);
+	RUN_TEST(test_tamanio);
+	RUN_TEST(test_proximo);
+	RUN_TEST(test_borrar_elem_intermedio);
+	RUN_TEST(test_borrar_elem_intermedio_2);
+	RUN_TEST(test_modificar_elem_intermedio);
 
-    return 0;
+	return 0;
 }
